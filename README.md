@@ -8,7 +8,7 @@ A device connects to the xmidt cloud via the xmidt client.  Cloud based services
 
 # the xmidt servers
 
-### caduceus
+### [caduceus](https://github.com/Comcast/caduceus)
 
 Caduceus provides the pub-sub message delivery mechanism for xmidt.
 
@@ -20,7 +20,7 @@ Caduceus provides the pub-sub message delivery mechanism for xmidt.
 [![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/Comcast/caduceus/blob/master/LICENSE)
 
 
-### scytale
+### [scytale](https://github.com/Comcast/scytale)
 
 Scytale accepts the inbound requests, fans out across data centers and delivers the messages to the Talaria machines that could be hosting the device connection.
 
@@ -32,7 +32,7 @@ Scytale accepts the inbound requests, fans out across data centers and delivers 
 [![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/Comcast/scytale/blob/master/LICENSE)
 
 
-### talaria
+### [talaria](https://github.com/Comcast/talaria)
 
 Talaria maintains the secure websocket connections from the device and passes the messages from or to the device.
 
@@ -44,7 +44,7 @@ Talaria maintains the secure websocket connections from the device and passes th
 [![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/Comcast/talaria/blob/master/LICENSE)
 
 
-### petasos
+### [petasos](https://github.com/Comcast/petasos)
 
 Petasos helps reduce the load on the Talaria machines during mass reboot cases by calculating which specific Talaria a device should connect to & redirecting the incoming request.
 
@@ -55,10 +55,11 @@ Petasos helps reduce the load on the Talaria machines during mass reboot cases b
 [![Issue Count](https://codeclimate.com/github/Comcast/petasos/badges/issue_count.svg)](https://codeclimate.com/github/Comcast/petasos)
 [![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/Comcast/petasos/blob/master/LICENSE)
 
+### [mnemosyne](https://github.com/Comcast/mnemosyne)
 
 # the xmidt client
 
-### parodus
+### [parodus](https://github.com/Comcast/parodus)
 
 Parodus is the light weight client that reaches out to the xmidt cloud to establish the connection.
 
@@ -70,8 +71,74 @@ Parodus is the light weight client that reaches out to the xmidt cloud to establ
 # server support libraries
 
 ### webpa-common
-### kratos
+### [webpa-common](https://github.com/Comcast/webpa-common)
+
+[![Build Status](https://travis-ci.org/Comcast/webpa-common.svg?branch=master)](https://travis-ci.org/Comcast/webpa-common) 
+[![codecov.io](http://codecov.io/github/Comcast/webpa-common/coverage.svg?branch=master)](http://codecov.io/github/Comcast/webpa-common?branch=master)
+[![Go Report Card](https://goreportcard.com/badge/github.com/Comcast/webpa-common)](https://goreportcard.com/report/github.com/Comcast/webpa-common)
+
+### [kratos](https://github.com/Comcast/kratos)
+
+[![Build Status](https://travis-ci.org/Comcast/kratos.svg?branch=master)](https://travis-ci.org/Comcast/kratos)
+[![codecov.io](http://codecov.io/github/Comcast/kratos/coverage.svg?branch=master)](http://codecov.io/github/Comcast/kratos?branch=master)
+[![Go Report Card](https://goreportcard.com/badge/github.com/Comcast/kratos)](https://goreportcard.com/report/github.com/Comcast/kratos)
+
+### [golang-money](https://github.com/Comcast/golang-money)
+
+[![Build Status](https://travis-ci.org/Comcast/golang-money.svg?branch=master)](https://travis-ci.org/Comcast/golang-money) 
+[![codecov.io](http://codecov.io/github/Comcast/golang-money/coverage.svg?branch=master)](http://codecov.io/github/Comcast/golang-money?branch=master) 
+[![Go Report Card](https://goreportcard.com/badge/github.com/Comcast/golang-money)](https://goreportcard.com/report/github.com/Comcast/golang-money) 
+
+### [tr18b1e](https://github.com/Comcast/tr18b1e)
+
+[![Build Status](https://travis-ci.org/Comcast/tr18b1e.svg?branch=master)](https://travis-ci.org/Comcast/tr18b1e)
+[![codecov.io](http://codecov.io/github/Comcast/tr18b1e/coverage.svg?branch=master)](http://codecov.io/github/Comcast/tr18b1e?branch=master)
+[![Go Report Card](https://goreportcard.com/badge/github.com/Comcast/tr18b1e)](https://goreportcard.com/report/github.com/Comcast/tr18b1e)
+
+### [golang-discovery-client](https://github.com/Comcast/golang-discovery-client)
+
+[![Build Status](https://travis-ci.org/Comcast/golang-discovery-client.svg?branch=master)](https://travis-ci.org/Comcast/golang-discovery-client) 
+[![codecov.io](http://codecov.io/github/Comcast/golang-discovery-client/coverage.svg?branch=master)](http://codecov.io/github/Comcast/golang-discovery-client?branch=master) 
+[![Go Report Card](https://goreportcard.com/badge/github.com/Comcast/golang-discovery-client)](https://goreportcard.com/report/github.com/Comcast/golang-discovery-client) 
 
 # client support libraries
 
-### 
+### nopoll
+### [nopoll](https://github.com/Comcast/nopoll)
+
+### [cimplog](https://github.com/Comcast/cimplog)
+
+[![Build Status](https://travis-ci.org/Comcast/cimplog.svg?branch=master)](https://travis-ci.org/Comcast/cimplog)
+[![codecov.io](http://codecov.io/github/Comcast/cimplog/coverage.svg?branch=master)](http://codecov.io/github/Comcast/cimplog?branch=master)
+[![Coverity](https://img.shields.io/coverity/scan/11572.svg)]("https://scan.coverity.com/projects/comcast-cimplog)
+[![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/Comcast/cimplog/blob/master/LICENSE.txt)
+
+### [seshat](https://github.com/Comcast/seshat)
+
+[![Build Status](https://travis-ci.org/Comcast/seshat.svg?branch=master)](https://travis-ci.org/Comcast/seshat)
+[![codecov.io](http://codecov.io/github/Comcast/seshat/coverage.svg?branch=master)](http://codecov.io/github/Comcast/seshat?branch=master)
+[![Coverity](https://img.shields.io/coverity/scan/11941.svg)]("https://scan.coverity.com/projects/comcast-seshat)
+[![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/Comcast/seshat/blob/master/LICENSE.txt)
+
+### [cjwt](https://github.com/Comcast/cjwt)
+
+[![Build Status](https://travis-ci.org/Comcast/cjwt.svg?branch=master)](https://travis-ci.org/Comcast/cjwt)
+[![codecov.io](http://codecov.io/github/Comcast/cjwt/coverage.svg?branch=master)](http://codecov.io/github/Comcast/cjwt?branch=master)
+[![Coverity](https://img.shields.io/coverity/scan/11926.svg)]("https://scan.coverity.com/projects/comcast-cjwt)
+[![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/Comcast/cjwt/blob/master/LICENSE.txt)
+
+### [cjson-extras](https://github.com/Comcast/cjson-extras)
+
+### [libucresolv](https://github.com/Comcast/libucresolv)
+
+### [wrp-c](https://github.com/Comcast/wrp-c)
+
+[![Build Status](https://travis-ci.org/Comcast/wrp-c.svg?branch=master)](https://travis-ci.org/Comcast/wrp-c)
+[![codecov.io](http://codecov.io/github/Comcast/wrp-c/coverage.svg?branch=master)](http://codecov.io/github/Comcast/wrp-c?branch=master)
+[![Coverity](https://img.shields.io/coverity/scan/9155.svg)]("https://scan.coverity.com/projects/comcast-wrp-c)
+[![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/Comcast/wrp-c/blob/master/LICENSE.txt)
+
+### [trower-base64](https://github.com/Comcast/trower-base64)
+
+[![Build Status](https://travis-ci.org/Comcast/trower-base64.svg?branch=master)](https://travis-ci.org/Comcast/trower-base64) [![codecov.io](http://codecov.io/github/Comcast/trower-base64/coverage.svg?branch=master)](http://codecov.io/github/Comcast/trower-base64?branch=master)
+[![coverity](https://img.shields.io/coverity/scan/9029.svg)](https://scan.coverity.com/projects/trower-base64)
