@@ -57,6 +57,8 @@ Petasos helps reduce the load on the Talaria machines during mass reboot cases b
 
 ### [mnemosyne](https://github.com/Comcast/mnemosyne)
 
+Mnemosyne provides a mapping between names of devices.
+
 # the xmidt client
 
 ### [parodus](https://github.com/Comcast/parodus)
@@ -70,7 +72,6 @@ Parodus is the light weight client that reaches out to the xmidt cloud to establ
 
 # server support libraries
 
-### webpa-common
 ### [webpa-common](https://github.com/Comcast/webpa-common)
 
 [![Build Status](https://travis-ci.org/Comcast/webpa-common.svg?branch=master)](https://travis-ci.org/Comcast/webpa-common) 
@@ -103,8 +104,7 @@ Parodus is the light weight client that reaches out to the xmidt cloud to establ
 
 # client support libraries
 
-### nopoll
-### [nopoll](https://github.com/Comcast/nopoll)
+### [nopoll fork](https://github.com/Comcast/nopoll)
 
 ### [cimplog](https://github.com/Comcast/cimplog)
 
