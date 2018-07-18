@@ -11,6 +11,17 @@ import (
 	"os"
 )
 
+const (
+	AuthHeaderName				= "Authorization"
+	TypeHeaderName              = "X-Xmidt-Message-Type"
+	ContentHeaderName           = "X-Xmidt-Content-Type"
+	TransIdHeaderName           = "X-Xmidt-Transaction-Uuid"
+	SourceHeaderName            = "X-Xmidt-Source"
+	DestHeaderName 				= "X-Webpa-Device-Name"
+	PathURL 					= "https://api.xmidt.comcast.net/api/v2/device"
+)
+
+
 var auth string
 
 func makeRequest(requestType, mac, messageType, source, transId, dest, contentType, payload string, client *http.Client) {
@@ -20,27 +31,25 @@ func makeRequest(requestType, mac, messageType, source, transId, dest, contentTy
 	
 	headers := make(map[string]string)
 	
-	headers["Authorization"] = auth
+	headers[AuthHeaderName] = auth
 	var req *http.Request
 	var err error
-	var url string
 
 	if "POST" == requestType {
-		headers["X-Xmidt-Message-Type"]= messageType
-		headers["X-Xmidt-Content-Type"]= contentType
-		headers["X-Xmidt-Transaction-Uuid"]= transId
-		headers["X-Xmidt-Source"]= source
-		headers["X-Webpa-Device-Name"]= deviceName
+		headers[TypeHeaderName]= messageType
+		headers[ContentHeaderName]= contentType
+		headers[TransIdHeaderName]= transId
+		headers[SourceHeaderName]= source
+		headers[DestHeaderName]= deviceName
 		
-		url = fmt.Sprintf("https://api.xmidt.comcast.net/api/v2/device")
-		fmt.Printf("Received Request %s, %s \n", messageType, url)
+		fmt.Printf("Received Request %s, %s \n", messageType, PathURL)
 		
-		req, err = http.NewRequest(requestType, url, bytes.NewBufferString(payload))
+		req, err = http.NewRequest(requestType, PathURL, bytes.NewBufferString(payload))
 	}
 	
 
 	if err != nil {
-		fmt.Printf("Request %s failed: %s, %v\n", requestType, url, err)
+		fmt.Printf("Request %s failed: %s, %v\n", requestType, PathURL, err)
 	}
 
 	for k, v := range headers {
@@ -82,7 +91,6 @@ func main() {
 	flag.StringVar(&mac, "mac", "", "device-id")
 	flag.StringVar(&messageType, "messageType", "", "type of the request to send")
 	flag.StringVar(&payload, "payload", "", "the payload to send to apply")
-	
 	flag.StringVar(&source, "source", "", "source value for CRUD operations")
 	flag.StringVar(&dest, "dest", "", "CRUD dest value to apply")
 	flag.StringVar(&transId, "transId", "", "transId for CRUD operations")
@@ -115,7 +123,6 @@ func main() {
 		},
 	}
 
-	fmt.Printf("Request Type: %s, Payload: %s\n", requestType, payload)
 	makeRequest(requestType, mac, messageType, source, transId, dest, contentType, payload, client)
 
 }
