@@ -2,13 +2,13 @@ package main
 
 import (
 	"bytes"
-	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
+	"github.com/Comcast/webpa-common/wrp"
 )
 
 const (
@@ -61,16 +61,38 @@ func makeRequest(requestType, mac, messageType, source, transId, dest, contentTy
 	if err != nil {
 		fmt.Printf("Failed to obtain request: %v\n", err)
 	} else {
-	
-		var res map[string]interface{}
-		dec := json.NewDecoder(resp.Body)
-		dec.UseNumber()
-		dec.Decode(&res)
 
 		if 200 != resp.StatusCode {
 			fmt.Printf("Failed. resp.StatusCode %v \n", resp.StatusCode)
+		} else if 200 == resp.StatusCode {
+			/*Decode Msgpack response to JSON format*/
+			target := wrp.AllFormats()
+			decoder := wrp.NewDecoder(resp.Body, target[0])
+			var buffer bytes.Buffer
+			encoder := wrp.NewEncoder(&buffer, target[1])
+
+			if message, err := wrp.TranscodeMessage(encoder, decoder); err != nil {
+				fmt.Println("Error while converting:", target[0], "to", target[1], err)
+			} else {
+				//Headers
+				fmt.Println("Content-Type :", resp.Header.Get("Content-Type"))
+				fmt.Println("Status :", resp.Header.Get("X-Xmidt-Status"))
+				fmt.Println("Build :", resp.Header.Get("X-Scytale-Build"))
+				fmt.Println("Flavor :", resp.Header.Get("X-Scytale-Flavor"))
+				fmt.Println("Region :", resp.Header.Get("X-Scytale-Region"))
+				fmt.Println("Server :", resp.Header.Get("X-Scytale-Server"))
+				//Metadata
+				fmt.Println("Fw-name :", message.Metadata["fw-name"])
+				//WRP fields
+				fmt.Println("TransactionKey :", message.TransactionKey())
+				fmt.Println("source :", message.Source)
+				fmt.Println("Destination :", message.Destination)
+				fmt.Println("MessageType :", message.Type)
+				fmt.Println("payload :", string(message.Payload))
+			}
+
 		} else {
-			fmt.Printf("Success. resp.StatusCode %v\n", resp.StatusCode)
+			fmt.Println("Request failed with status ", resp.StatusCode)
 		}
 		io.Copy(ioutil.Discard, resp.Body)
 		resp.Body.Close()
