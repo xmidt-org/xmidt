@@ -24,10 +24,8 @@ const (
 
 var auth string
 
-func makeRequest(requestType, mac, messageType, source, transId, dest, contentType, payload string, client *http.Client) {
+func makeRequest(requestType, messageType, source, transId, dest, contentType, payload string, client *http.Client) {
 
-	var deviceName string
-	deviceName = fmt.Sprintf("mac:%s/%s", mac, dest)
 	
 	headers := make(map[string]string)
 	
@@ -40,9 +38,7 @@ func makeRequest(requestType, mac, messageType, source, transId, dest, contentTy
 		headers[ContentHeaderName]= contentType
 		headers[TransIdHeaderName]= transId
 		headers[SourceHeaderName]= source
-		headers[DestHeaderName]= deviceName
-		
-		fmt.Printf("Received Request %s, %s \n", messageType, PathURL)
+		headers[DestHeaderName]= dest
 		
 		req, err = http.NewRequest(requestType, PathURL, bytes.NewBufferString(payload))
 	}
@@ -108,9 +104,8 @@ func main() {
 	auth = "Bearer " + os.Getenv("WEBPA_SAT")
 
 	var maxConnReuse uint
-	var requestType, mac, messageType, source, dest, contentType, transId, payload string
+	var requestType, messageType, source, dest, contentType, transId, payload string
 
-	flag.StringVar(&mac, "mac", "", "device-id")
 	flag.StringVar(&messageType, "messageType", "", "type of the request to send")
 	flag.StringVar(&payload, "payload", "", "the payload to send to apply")
 	flag.StringVar(&source, "source", "", "source value for CRUD operations")
@@ -145,6 +140,6 @@ func main() {
 		},
 	}
 
-	makeRequest(requestType, mac, messageType, source, transId, dest, contentType, payload, client)
+	makeRequest(requestType, messageType, source, transId, dest, contentType, payload, client)
 
 }

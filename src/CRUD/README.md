@@ -6,7 +6,7 @@ To build with just go:
 export GOPATH=`pwd`
 cd src
 glide install
-cd src/CRUD
+cd CRUD
 go build
 
 ```
@@ -18,26 +18,25 @@ export WEBPA_SAT=<SAT_Token>
 
 ### Create
 ```
-./CRUD -messageType=Create -payload='{ "expires" : 12345}' -mac=14cfe2142XXX -source="tag-update" -dest="parodus/tag/test1" -transId="bd4ad2d1-5c9c-486f-8e25-52c242b38" -contentType="application/json"
-
+./CRUD -messageType=5 -source="tag-update" -dest="mac:14cfe21421xx/parodus/tag/test1" -transId="bd4ad2d1-5c9c-486f-8e25-52c242b38" -contentType="application/json" -payload='{ "expires" : 12345}'
 ```
 
 ### Retrieve
 ```
-./CRUD -messageType=Retrieve -mac=14cfe2142XXX -source="tag-update" -dest="parodus/tag/test1" -transId="bd4ad2d1-5c9c-486f-8e25-52c242b38" -contentType="application/json"
+./CRUD -messageType=6 -source="tag-update" -dest="mac:14cfe21421xx/parodus/tag/test1" -transId="bd4ad2d1-5c9c-486f-8e25-52c242b38" -contentType="application/json"
 
 ```
 
 
 ### Update
 ```
-./CRUD -messageType=Update -payload='{ "expires" : 12345}' -mac=14cfe2142XXX -source="tag-update" -dest="parodus/tag/test1" -transId="bd4ad2d1-5c9c-486f-8e25-52c242b38" -contentType="application/json"
+./CRUD -messageType=7 -source="tag-update" -dest="mac:14cfe21421xx/parodus/tag/test1" -transId="bd4ad2d1-5c9c-486f-8e25-52c242b38" -contentType="application/json" -payload='{ "expires" : 12345}'
 
 ```
 
 ### Delete
 ```
-./CRUD -messageType=Delete -mac=14cfe2142XXX -source="tag-update" -dest="parodus/tag/test1" -transId="bd4ad2d1-5c9c-486f-8e25-52c242b38" -contentType="application/json"
+./CRUD -messageType=8 -source="tag-update" -dest="mac:14cfe21421xx/parodus/tag/test1" -transId="bd4ad2d1-5c9c-486f-8e25-52c242b38" -contentType="application/json"
 
 ```
 
