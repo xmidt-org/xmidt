@@ -8,41 +8,45 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+
 	"github.com/Comcast/webpa-common/wrp"
 )
 
 const (
-	AuthHeaderName				= "Authorization"
-	TypeHeaderName              = "X-Xmidt-Message-Type"
-	ContentHeaderName           = "X-Xmidt-Content-Type"
-	TransIdHeaderName           = "X-Xmidt-Transaction-Uuid"
-	SourceHeaderName            = "X-Xmidt-Source"
-	DestHeaderName 				= "X-Webpa-Device-Name"
-	PathURL 					= "https://api.xmidt.comcast.net/api/v2/device"
+	AuthHeaderName    = "Authorization"
+	TypeHeaderName    = "X-Xmidt-Message-Type"
+	ContentHeaderName = "X-Xmidt-Content-Type"
+	TransIdHeaderName = "X-Xmidt-Transaction-Uuid"
+	SourceHeaderName  = "X-Xmidt-Source"
+	DestHeaderName    = "X-Webpa-Device-Name"
+	PathURL           = "https://api.xmidt.comcast.net/api/v2/device"
+	ContentType       = "Content-Type"
+	XScytaleBuild     = "X-Scytale-Build"
+	//XmidtStatus       = "X-Xmidt-Status"
+	XScytaleFlavor = "X-Scytale-Flavor"
+	XScytaleRegion = "X-Scytale-Region"
+	XScytaleServer = "X-Scytale-Server"
 )
-
 
 var auth string
 
 func makeRequest(requestType, messageType, source, transId, dest, contentType, payload string, client *http.Client) {
 
-	
 	headers := make(map[string]string)
-	
+
 	headers[AuthHeaderName] = auth
 	var req *http.Request
 	var err error
 
 	if "POST" == requestType {
-		headers[TypeHeaderName]= messageType
-		headers[ContentHeaderName]= contentType
-		headers[TransIdHeaderName]= transId
-		headers[SourceHeaderName]= source
-		headers[DestHeaderName]= dest
-		
+		headers[TypeHeaderName] = messageType
+		headers[ContentHeaderName] = contentType
+		headers[TransIdHeaderName] = transId
+		headers[SourceHeaderName] = source
+		headers[DestHeaderName] = dest
+
 		req, err = http.NewRequest(requestType, PathURL, bytes.NewBufferString(payload))
 	}
-	
 
 	if err != nil {
 		fmt.Printf("Request %s failed: %s, %v\n", requestType, PathURL, err)
@@ -51,9 +55,9 @@ func makeRequest(requestType, messageType, source, transId, dest, contentType, p
 	for k, v := range headers {
 		req.Header.Set(k, v)
 	}
-	
+
 	resp, err := client.Do(req)
-	
+
 	if err != nil {
 		fmt.Printf("Failed to obtain request: %v\n", err)
 	} else {
@@ -62,28 +66,22 @@ func makeRequest(requestType, messageType, source, transId, dest, contentType, p
 			fmt.Printf("Failed. resp.StatusCode %v \n", resp.StatusCode)
 		} else if 200 == resp.StatusCode {
 			/*Decode Msgpack response to JSON format*/
-			target := wrp.AllFormats()
-			decoder := wrp.NewDecoder(resp.Body, target[0])
+			decoder := wrp.NewDecoder(resp.Body, wrp.Msgpack)
 			var buffer bytes.Buffer
-			encoder := wrp.NewEncoder(&buffer, target[1])
+			encoder := wrp.NewEncoder(&buffer, wrp.JSON)
 
 			if message, err := wrp.TranscodeMessage(encoder, decoder); err != nil {
-				fmt.Println("Error while converting:", target[0], "to", target[1], err)
+				fmt.Println("Error while converting:", wrp.Msgpack, "to", wrp.JSON, err)
 			} else {
 				//Headers
-				fmt.Println("Content-Type :", resp.Header.Get("Content-Type"))
-				fmt.Println("Status :", resp.Header.Get("X-Xmidt-Status"))
-				fmt.Println("Build :", resp.Header.Get("X-Scytale-Build"))
-				fmt.Println("Flavor :", resp.Header.Get("X-Scytale-Flavor"))
-				fmt.Println("Region :", resp.Header.Get("X-Scytale-Region"))
-				fmt.Println("Server :", resp.Header.Get("X-Scytale-Server"))
-				//Metadata
-				fmt.Println("Fw-name :", message.Metadata["fw-name"])
-				//WRP fields
-				fmt.Println("TransactionKey :", message.TransactionKey())
-				fmt.Println("source :", message.Source)
-				fmt.Println("Destination :", message.Destination)
-				fmt.Println("MessageType :", message.Type)
+				fmt.Println(ContentType, ":", resp.Header.Get(ContentType))
+				//fmt.Println(XmidtStatus, ":", resp.Header.Get(XmidtStatus))
+				fmt.Println(XScytaleBuild, ":", resp.Header.Get(XScytaleBuild))
+				fmt.Println(XScytaleFlavor, ":", resp.Header.Get(XScytaleFlavor))
+				fmt.Println(XScytaleRegion, ":", resp.Header.Get(XScytaleRegion))
+				fmt.Println(XScytaleServer, ":", resp.Header.Get(XScytaleServer))
+				//Response from cloud
+				fmt.Println("WRP response", string(buffer.Bytes()))
 				fmt.Println("payload :", string(message.Payload))
 			}
 
@@ -116,7 +114,7 @@ func main() {
 
 	flag.Parse()
 
-	if "" == messageType{
+	if "" == messageType {
 		fmt.Printf("Please provide messageType option\n")
 		return
 	} else if "" != messageType {
@@ -127,7 +125,7 @@ func main() {
 				return
 			}
 		}
-		
+
 		if "" == source || "" == dest || "" == transId || "" == contentType {
 			fmt.Printf("Please provide the required arguments: source, dest, transId, contentType\n")
 			return
