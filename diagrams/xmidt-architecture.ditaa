@@ -64,8 +64,8 @@
    |                                         |                    |       :                     |   |    |                             v        |        |:               |    |                                                
    |                                         |                    |       |                     |   |    |                       /-----------\  |        ||               |    |                                                
    |                                         |                    |       |                     |   |    |    /-------------\    |c9D9       |  |        ||               |    |                                                
-   |                                         |                    |       |                     |   |    |    |             |    | Zookeeper |  |        ||               |    |                                                
-   |                     /-----------\       |                    v       |                     |   :    |  /-+-----------\ |<-->|  Ensemble |  \--------/|               |    |                                                
+   |                                         |                    |       |                     |   |    |    |             |    |   Consul  |  |        ||               |    |                                                
+   |                     /-----------\       |                    v       |                     |   :    |  /-+-----------\ |<-->|  Cluster  |  \--------/|               |    |                                                
    |                     |cDB9       |       |      /-------------+----\  |                     |   |    |  |c9D9         | |    |           |            |               |    |                                                
    |                     |   WiFi    |<----->|      |c9D9              |  |     HTTP Redirected |   | ---/  |   Petasos   +-/    \-----------/            |               |    |                                                
    |                     | Harvester |       |      |     Parodus      |<-----------------------|---------->|     HTTP    |                               |               |    |                                                
@@ -85,7 +85,7 @@
 
                                                             +----------------------------------+
                                                     Legend  |cD99 Upstream Service Component   |      Notes: All data paths are HTTPS except Scytale <----> Petasos.
-                                                            +----------------------------------+            
+                                                            +----------------------------------+             Webpa is an example of an upstream service.
                                                             |c9D9 Xmidt Service Component      |
                                                             +----------------------------------+
                                                             |cDB9 RDK Service Component        |
