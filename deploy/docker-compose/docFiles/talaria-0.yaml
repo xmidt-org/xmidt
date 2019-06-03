@@ -47,9 +47,9 @@
         maxIdleConnsPerHost: 100
         idleConnTimeout: "120s"
       clientTimeout: "160s"
-      authKey: YXV0aEhlYWRlcg==
+      authKey: dXNlcjpwYXNz
   inbound:
-    authKey: YXV0aEhlYWRlcg==
+    authKey: dXNlcjpwYXNz
 
   eventMap:
     default: http://caduceus:6000/api/v3/notify

@@ -47,7 +47,7 @@
       topicArn: arn:aws:sns:us-east-1:000000000000:xmidt-local-caduceus
       urlPath: "/api/v2/aws/sns"
 
-  authHeader: ["YXV0aEhlYWRlcg=="]
+  authHeader: ["dXNlcjpwYXNz"]
   targetURL: http://scytale:6300
   # WRPSource: "dns:tr1d1um.xmidt.comcast.net"
   supportedServices:

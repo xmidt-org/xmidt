@@ -27,7 +27,7 @@
 
   fanout:
     endpoints: [ "http://petasos:6400/api/v2/device/send" ]
-    authorization: YXV0aEhlYWRlcg==
+    authorization: dXNlcjpwYXNz
     fanoutTimeout: "5s"
     clientTimeout: "5s"
     concurrency: 10
@@ -76,8 +76,8 @@
       topicArn: arn:aws:sns:us-east-1:000000000000:xmidt-local-caduceus
       urlPath: "/api/v2/aws/sns"
   waitForDns: 0
-  authHeader: ["YXV0aEhlYWRlcg=="]
+  authHeader: ["dXNlcjpwYXNz"]
   start:
     duration: 1
     apiPath: http://caduceus:6000/hooks
-    authHeader: YXV0aEhlYWRlcg==
+    authHeader: dXNlcjpwYXNz
