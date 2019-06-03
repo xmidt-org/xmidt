@@ -1,0 +1,58 @@
+---
+  fqdn: petasos
+  env: test
+  scheme: http
+
+  primary:
+    address: ":6400"
+  health:
+    address: ":6401"
+    options:
+      - "PayloadsOverZero"
+      - "PayloadsOverHundred"
+      - "PayloadsOverThousand"
+      - "PayloadsOverTenThousand"
+  pprof:
+    address: ":6402"
+  metric:
+    address: ":6403"
+    metricsOptions:
+      namespace: "xmidt"
+      subsystem: "petasos"
+  control:
+    address: ":6404"
+
+  log:
+    file: "stdout"
+    level: "debug"
+    json: true
+
+
+  service:
+    defaultScheme: http
+    consul:
+      client:
+        address: "consul0:8500"
+        scheme: "http"
+        waitTime: "30s"
+      disableGenerateID: true
+      watches:
+        -
+          service: "talaria"
+          passingOnly: true
+      vnodeCount: 211
+
+  redundancy:
+    dc1:
+      defaultScheme: http
+      consul:
+        client:
+          address: "consul1:8500"
+          scheme: "http"
+          waitTime: "30s"
+        disableGenerateID: true
+        watches:
+          -
+            service: "talaria"
+            passingOnly: true
+        vnodeCount: 211

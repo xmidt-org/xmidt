@@ -1,0 +1,91 @@
+---
+  primary:
+    address: ":6000"
+  health:
+    address: ":6001"
+    options:
+      - "PayloadsOverZero"
+      - "PayloadsOverHundred"
+      - "PayloadsOverThousand"
+      - "PayloadsOverTenThousand"
+  pprof:
+    address: ":6002"
+  metric:
+    address: ":6003"
+    metricsOptions:
+      namespace: "xmidt"
+      subsystem: "caduceus"
+  log:
+    file: "stdout"
+    level: "DEBUG"
+    json: false
+  env: test
+  fqdn: caduceus
+  scheme: http
+
+  numWorkerThreads: 10
+  jobQueueSize: 10
+  sender:
+    numWorkersPerSender: 5000
+    queueSizePerSender: 100000
+    cutOffPeriod: 10s
+    linger: 180s
+    clientTimeout: 60s
+    deliveryRetries: 1
+    deliveryInterval: 10ms
+    responseHeaderTimeout: 10s
+  profilerFrequency: 15
+  profilerDuration: 15
+  profilerQueueSize: 100
+  totalIncomingPayloadSizeBuckets:
+    - 100
+    - 1000
+    - 10000
+  perSourceIncomingPayloadSizeBuckets:
+    - 100
+    - 1000
+    - 10000
+
+  aws:
+    accessKey: "supbro"
+    secretKey: "nahbro"
+    env: local-dev
+    sns:
+      awsEndpoint: http://goaws:4100
+      region: "us-east-1"
+      topicArn: arn:aws:sns:us-east-1:000000000000:xmidt-local-caduceus
+      urlPath: "/api/v2/aws/sns"
+  waitForDns: 0
+  authHeader: ["YXV0aEhlYWRlcg=="]
+  start:
+    duration: 1
+    apiPath: http://caduceus:6000/hooks
+    authHeader: YXV0aEhlYWRlcg==
+
+  service:
+    defaultScheme: http
+    consul:
+      client:
+        address: "consul0:8500"
+        scheme: "http"
+        waitTime: "30s"
+      disableGenerateID: true
+      vnodeCount: 211
+      registrations:
+        -
+          id: "caduceus"
+          name: "caduceus"
+          tags:
+            - "dev"
+            - "docker"
+            - "stage=dev"
+            - "flavor=docker"
+          address: "http://caduceus"
+          scheme: "http"
+          port: 6000
+          checks:
+            -
+              checkID: "caduceus:http"
+              http: "http://caduceus:6001/health"
+              interval: "30s"
+              deregisterCriticalServiceAfter: "70s"

@@ -1,0 +1,79 @@
+---
+# my global config
+global:
+  scrape_interval: 2s      # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 2s  # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+    monitor: 'codelab-monitor'
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+# rule_files:
+#   - "first.rules"
+#   - "second.rules"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: 'prometheus'
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    static_configs:
+      - targets: ['prometheus:9090']
+
+  - job_name: 'docker'
+         # metrics_path defaults to '/metrics'
+         # scheme defaults to 'http'.
+
+    static_configs:
+      - targets: ['docker.for.mac.host.internal:9323']
+  - job_name: 'caduceus'
+         # metrics_path defaults to '/metrics'
+         # scheme defaults to 'http'.
+
+    static_configs:
+      - targets: ['caduceus:6003']
+
+  - job_name: 'petasos'
+         # metrics_path defaults to '/metrics'
+         # scheme defaults to 'http'.
+
+    static_configs:
+      - targets: ['petasos:6403']
+
+  - job_name: 'scytale'
+         # metrics_path defaults to '/metrics'
+         # scheme defaults to 'http'.
+
+    static_configs:
+      - targets: ['scytale:6303']
+
+  - job_name: 'talaria'
+         # metrics_path defaults to '/metrics'
+         # scheme defaults to 'http'.
+
+    static_configs:
+      - targets: ['talaria-0:6204', 'talaria-1:6214', 'talaria-2:6224']
+
+  - job_name: 'tr1d1um'
+         # metrics_path defaults to '/metrics'
+         # scheme defaults to 'http'.
+
+    static_configs:
+      - targets: ['tr1d1um:6103']
+
+  - job_name: 'consul'
+    metrics_path: "/v1/agent/metrics"
+    params:
+      format: ["prometheus"]
+
+         # metrics_path defaults to '/metrics'
+         # scheme defaults to 'http'.
+    static_configs:
+      - targets: ['consul0:8500','consul1:8500']

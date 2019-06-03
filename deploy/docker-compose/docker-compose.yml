@@ -1,0 +1,154 @@
+version: '3.4'
+services:
+  caduceus:
+    image: caduceus:${CADUCEUS_VERSION}
+    ports:
+      - 6000:6000
+      - 6001:6001
+      - 6002:6002
+      - 6003:6003
+    depends_on:
+      - goaws
+    volumes:
+      - ./docFiles/caduceus.yaml:/etc/caduceus/caduceus.yaml
+    networks:
+      - xmidt
+
+  tr1d1um:
+    image: tr1d1um:${TR1D1UM_VERSION}
+    ports:
+      - 6100:6100
+      - 6101:6101
+      - 6102:6102
+    depends_on:
+      - goaws
+      - scytale
+    volumes:
+      - ./docFiles/tr1d1um.yaml:/etc/tr1d1um/tr1d1um.yaml
+    networks:
+      - xmidt
+
+  scytale:
+    image: scytale:${SCYTALE_VERSION}
+    ports:
+      - 6300:6300
+      - 6301:6301
+      - 6302:6302
+      - 6303:6303
+    depends_on:
+      - goaws
+      - petasos
+    volumes:
+      - ./docFiles/scytale.yaml:/etc/scytale/scytale.yaml
+    networks:
+      - xmidt
+
+  goaws:
+    image: pafortin/goaws
+    container_name: goaws
+    ports:
+      - 4100:4100
+    networks:
+      - xmidt
+    volumes:
+      - ./docFiles/sns.yaml:/conf/goaws.yaml
+
+  prometheus:
+    image: prom/prometheus
+    networks:
+      - xmidt
+    ports:
+      - 9090:9090
+    depends_on:
+      - consul0
+      - consul1
+    volumes:
+      - ./docFiles/prometheus.yml:/prometheus-data/prometheus.yml
+    command:  --log.level=debug --config.file=/prometheus-data/prometheus.yml
+
+# Mark petasos Services
+  petasos: &petasos
+    image: petasos:${PETASOS_VERSION}
+    ports:
+      - 6400:6400
+      - 6401:6401
+      - 6402:6402
+      - 6403:6403
+      - 6404:6404
+    depends_on:
+      - consul0
+    volumes:
+      - ./docFiles/petasos.yaml:/etc/petasos/petasos.yaml
+    networks:
+      - xmidt
+
+# Mark Talaria Services
+  talaria-0: &talaria
+    image: talaria:${TALARIA_VERSION}
+    ports:
+      - 6200:6200
+      - 6201:6201
+      - 6202:6202
+      - 6203:6203
+      - 6204:6204
+    depends_on:
+      - consul0
+    volumes:
+      - ./docFiles/talaria-0.yaml:/etc/talaria/talaria.yaml
+    networks:
+      - xmidt
+  talaria-1:
+    <<: *talaria
+    ports:
+      - 6210:6210
+      - 6211:6211
+      - 6212:6212
+      - 6213:6213
+      - 6214:6214
+    volumes:
+      - ./docFiles/talaria-1.yaml:/etc/talaria/talaria.yaml
+  talaria-2:
+    <<: *talaria
+    ports:
+      - 6220:6220
+      - 6221:6221
+      - 6222:6222
+      - 6223:6223
+      - 6224:6224
+    volumes:
+      - ./docFiles/talaria-2.yaml:/etc/talaria/talaria.yaml
+
+# Mark Consul Definitions
+  consul0:
+    image: consul:latest
+    container_name: consul0
+    hostname: consul0
+    ports:
+      - 8400:8400
+      - 8500:8500
+      - 8600:8600
+      - 8600:8600/udp
+    networks:
+      - xmidt
+    volumes:
+      - ./docFiles/consul-0.json:/consul.json
+    command: "agent -server -bootstrap-expect 1 -ui -client 0.0.0.0 -config-file consul.json"
+  consul1:
+    image: consul:latest
+    container_name: consul1
+    hostname: consul1
+    ports:
+      - 8401:8400
+      - 8501:8500
+      - 8601:8600
+      - 8601:8600/udp
+    networks:
+      - xmidt
+    depends_on:
+      - consul0
+    volumes:
+      - ./docFiles/consul-1.json:/consul.json
+    command: "agent -server -bootstrap-expect 1 -ui -client 0.0.0.0 -config-file consul.json"
+
+networks:
+  xmidt:
