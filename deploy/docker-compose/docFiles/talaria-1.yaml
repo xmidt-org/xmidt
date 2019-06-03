@@ -1,0 +1,96 @@
+---
+  fqdn: talaria
+  env: test
+  scheme: http
+
+  primary:
+    address: ":6210"
+  health:
+    address: ":6211"
+  pprof:
+    address: ":6212"
+  control:
+    address: ":6213"
+  metric:
+    address: ":6214"
+    metricsOptions:
+      namespace: "xmidt"
+      subsystem: "talaria"
+
+  log:
+    file: "stdout"
+    level: "debug"
+    json: false
+
+  device:
+    manager:
+      upgrader:
+        handshakeTimeout: "10s"
+      maxDevices: 2000
+      deviceMessageQueueSize: 100
+      pingPeriod: "45s"
+      idlePeriod: "135s"
+      requestTimeout: "15s"
+    outbound:
+      method: "POST"
+      eventEndpoints:
+        default: http://caduceus:6000/api/v3/notify
+      requestTimeout: "125s"
+      defaultScheme: "http"
+      allowedSchemes:
+        - "http"
+        - "https"
+      outboundQueueSize: 1000
+      workerPoolSize: 100
+      transport:
+        maxIdleConns: 0
+        maxIdleConnsPerHost: 100
+        idleConnTimeout: "120s"
+      clientTimeout: "160s"
+      authKey: dXNlcjpwYXNz
+  inbound:
+    authKey: dXNlcjpwYXNz
+
+  eventMap:
+    default: http://caduceus:6000/api/v3/notify
+
+  service:
+    defaultScheme: http
+    consul:
+      client:
+        address: "consul0:8500"
+        scheme: "http"
+        waitTime: "30s"
+      disableGenerateID: true
+      vnodeCount: 211
+      watches:
+        -
+          service: "talaria"
+          tags:
+            - "dev"
+            - "docker"
+          passingOnly: true
+        -
+          service: "caduceus"
+          tags:
+            - "dev"
+            - "docker"
+          passingOnly: true
+      registrations:
+        -
+          id: "talaria-1"
+          name: "talaria"
+          tags:
+            - "dev"
+            - "docker"
+            - "stage=dev"
+            - "flavor=docker"
+          address: "http://talaria-1"
+          scheme: "http"
+          port: 6210
+          checks:
+            -
+              checkID: "talaria-1:http"
+              http: "http://talaria-1:6211/health"
+              interval: "30s"
+              deregisterCriticalServiceAfter: "70s"
