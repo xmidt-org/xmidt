@@ -120,3 +120,36 @@ Content-Length: 57
 
 <a href="http://talaria-0:6200">Temporary Redirect</a>.
 ```
+
+Checkout that tr1d1um is able to talk with scytale & talaria:
+```
+curl localhost:6100/api/v2/device/mac:112233445566/config?names=Foo -i -H "Authorization: Basic dXNlcjpwYXNz"
+```
+
+Should give you:
+```
+HTTP/1.1 404 Not Found
+X-Scytale-Build: development
+X-Scytale-Flavor: development
+X-Scytale-Region: local
+X-Scytale-Server: localhost
+X-Scytale-Start-Time: 04 Jun 19 02:12 UTC
+X-Talaria-Build: development
+X-Talaria-Flavor: development
+X-Talaria-Region: local
+X-Talaria-Server: localhost
+X-Talaria-Start-Time: 04 Jun 19 02:12 UTC
+X-Tr1d1um-Build: development
+X-Tr1d1um-Flavor: development
+X-Tr1d1um-Region: local
+X-Tr1d1um-Server: localhost
+X-Tr1d1um-Start-Time: 04 Jun 19 02:11 UTC
+X-Webpa-Transaction-Id: LQxoB5sUSGWPNgAzxRIXLA
+X-Xmidt-Message-Error: The device does not exist
+X-Xmidt-Span: "http://petasos:6400/api/v2/device/send","2019-06-04T02:27:26Z","2.185274ms"
+Date: Tue, 04 Jun 2019 02:27:26 GMT
+Content-Length: 87
+Content-Type: text/plain; charset=utf-8
+
+{"code": 404, "message": "Could not process device request: The device does not exist"}
+```
