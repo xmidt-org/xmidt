@@ -12,11 +12,32 @@ brought up for current ease of use. Future releases will deprecate tr1d1um.
 
   - Build the images locally
   ```bash
-  # for each service
-  cd <# service #>
-  git pull origin master
-  # notice the dot
-  docker build -t <# service #>:local .
+  git clone git@github.com:Comcast/xmidt.git
+git clone git@github.com:Comcast/talaria.git
+git clone git@github.com:Comcast/scytale.git
+git clone git@github.com:Comcast/petasos.git
+git clone git@github.com:Comcast/caduceus.git
+git clone git@github.com:Comcast/tr1d1um.git
+
+cd talaria
+docker build -t talaria:local .
+cd ..
+
+cd scytale
+docker build -t scytale:local .
+cd ..
+
+cd petasos
+docker build -t petasos:local .
+cd ..
+
+cd caduceus
+docker build -t caduceus:local .
+cd ..
+
+cd tr1d1um
+docker build -t tr1d1um:local .
+cd ..
   ```
 
   _note_: for building goaws:local since master breaks docker networking
@@ -44,6 +65,7 @@ brought up for current ease of use. Future releases will deprecate tr1d1um.
 
 3. To bring the containers up run:
    ```bash
+   cd xmidt/deploy/docker-compose
    docker-compose up -d
    ```
    If you only want to bring up, for example, the scytale and talaria, run:
@@ -75,3 +97,26 @@ You can initially connect to 'localhost:6400' but on the redirect change `talari
 or you can just connect to a talaria `localhost:6200`
 
 Once connected you should see it connected via [metrics](http://localhost:9090/graph?g0.range_input=1h&g0.expr=xmidt_talaria_device_count&g0.tab=0)
+
+### Interact with the machines
+
+Checkout that petasos is working:
+```
+curl localhost:6400 -H "X-Webpa-Device-Name: mac:112233445566" -i
+```
+
+Should give you the following:
+```
+HTTP/1.1 307 Temporary Redirect
+Content-Type: text/html; charset=utf-8
+Location: http://talaria-0:6200
+X-Petasos-Build: development
+X-Petasos-Flavor: development
+X-Petasos-Region: local
+X-Petasos-Server: localhost
+X-Petasos-Start-Time: 04 Jun 19 02:12 UTC
+Date: Tue, 04 Jun 2019 02:16:58 GMT
+Content-Length: 57
+
+<a href="http://talaria-0:6200">Temporary Redirect</a>.
+```
