@@ -19,6 +19,14 @@ brought up for current ease of use. Future releases will deprecate tr1d1um.
   docker build -t <# service #>:local .
   ```
 
+  _note_: for building goaws:local since master breaks docker networking
+  ```
+  git clone git@github.com:kcajmagic/goaws.git
+  cd goaws
+  git checkout adding_http_support
+  docker build -t goaws:local .
+  ```
+
 2. Set an environment variables relevant for the services you are deploying. If
    you aren't using locally built images, replace `local` with the correct tag:
    _note_ currently the images are not hosted anywhere
@@ -52,7 +60,7 @@ brought up for current ease of use. Future releases will deprecate tr1d1um.
 
 ### INFO
 The docker-compose file provides 1 full datacenter with on talaria in a "backup"
-datacenter. since this is just pure docker no swarm or kubernets its easiest to
+datacenter. since this is just pure docker no swarm or kubernetes its easiest to
 deal with just one dc, and since all ports are exposed the names might seem a little weird.
 
 #### Connection
@@ -65,3 +73,5 @@ will be hard since you will need to handle the redirect.
 You can initially connect to 'localhost:6400' but on the redirect change `talaria-1:6210` to `localhost:6210`
 
 or you can just connect to a talaria `localhost:6200`
+
+Once connected you should see it connected via [metrics](http://localhost:9090/graph?g0.range_input=1h&g0.expr=xmidt_talaria_device_count&g0.tab=0)

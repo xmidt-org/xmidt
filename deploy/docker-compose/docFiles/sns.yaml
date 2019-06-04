@@ -16,7 +16,7 @@ Local:                              # Environment name that can be passed on the
     - Name: xmidt-local-caduceus            # Topic name - no Subscriptions
 
 Dev:                                # Another environment
-  Host: localhost
+  Host: goaws
   Port: 4100
 # SqsPort: 9324
 # SnsPort: 9292

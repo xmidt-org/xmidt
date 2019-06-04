@@ -44,7 +44,7 @@ services:
       - xmidt
 
   goaws:
-    image: pafortin/goaws
+    image: goaws:local
     container_name: goaws
     ports:
       - 4100:4100
