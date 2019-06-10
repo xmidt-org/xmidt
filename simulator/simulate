@@ -1,0 +1,57 @@
+#!/bin/sh
+parodus_port=16014
+aker_port=16015
+mocktr181_port=16016
+
+if [[ -z "${URL}" ]]; then
+    URL="http://petasos:6400"
+fi
+
+if [[ -z "${FIRMWARE}" ]]; then
+    FIRMWARE="mock-rdkb-firmware"
+fi
+
+if [[ -z "${BOOT_TIME}" ]]; then
+    BOOT_TIME=`date +%s`
+fi
+
+if [[ -z "${HW_MANUFACTURER}" ]]; then
+    HW_MANUFACTURER="Example Inc."
+fi
+
+if [[ -z "${REBOOT_REASON}" ]]; then
+    REBOOT_REASON="unknown"
+fi
+
+if [[ -z "${SERIAL_NUMBER}" ]]; then
+    SERIAL_NUMBER="mock-rdkb-simulator"
+fi
+
+if [[ -z "${CMAC}" ]]; then
+    CMAC="112233445566"
+fi
+
+parodus --hw-model=aker-testing \
+        --hw-serial-number=$SERIAL_NUMBER \
+        --hw-manufacturer=$HW_MANUFACTURER \
+        --hw-mac=$CMAC \
+        --hw-last-reboot-reason=$REBOOT_REASON \
+        --fw-name=$FIRMWARE \
+        --boot-time=$BOOT_TIME \
+        --parodus-local-url=tcp://127.0.0.1:$parodus_port \
+        --webpa-ping-timeout=60 \
+        --webpa-backoff-max=2 \
+        --webpa-interface-used=eth0 \
+        --webpa-url=$URL \
+        --force-ipv4 > /dev/null &
+
+aker -p tcp://127.0.0.1:$parodus_port \
+     -c tcp://127.0.0.1:$aker_port \
+     -w echo \
+     -d /tmp/aker-data.msgpack \
+     -f /tmp/aker-data.msgpack.md5 \
+     -m 128 > /dev/null &
+
+mock_tr181 -p $parodus_port \
+           -c $mocktr181_port \
+           -d /etc/mock_tr181.json > /dev/null

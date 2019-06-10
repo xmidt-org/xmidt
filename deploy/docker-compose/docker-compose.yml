@@ -118,6 +118,17 @@ services:
     volumes:
       - ./docFiles/talaria-2.yaml:/etc/talaria/talaria.yaml
 
+# Mark rdkb-simulator Services
+  simulator: &simulator
+    image: simulator:${SIMULATOR_VERSION}
+    depends_on:
+      - talaria-0
+      - talaria-1
+      - talaria-2
+      - petasos
+    networks:
+      - xmidt
+
 # Mark Consul Definitions
   consul0:
     image: consul:latest

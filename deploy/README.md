@@ -12,7 +12,7 @@ brought up for current ease of use. Future releases will deprecate tr1d1um.
 
   - Build the images locally
   ```bash
-  git clone git@github.com:Comcast/xmidt.git
+git clone git@github.com:Comcast/xmidt.git
 git clone git@github.com:Comcast/talaria.git
 git clone git@github.com:Comcast/scytale.git
 git clone git@github.com:Comcast/petasos.git
@@ -38,6 +38,10 @@ cd ..
 cd tr1d1um
 docker build -t tr1d1um:local .
 cd ..
+
+cd xmidt/simulator
+docker build -t simulator:local .
+cd ../..
   ```
 
   _note_: for building goaws:local since master breaks docker networking
@@ -56,6 +60,9 @@ cd ..
    export SCYTALE_VERSION=local
    export CADUCEUS_VERSION=local
    export PETASOS_VERSION=local
+
+   # This is the client code setup to run locally.
+   export SIMULATOR_VERSION=local
 
    # This is WebPA not XMiDT
    export TR1D1UM_VERSION=local
@@ -123,7 +130,7 @@ Content-Length: 57
 
 Checkout that tr1d1um is able to talk with scytale & talaria:
 ```
-curl localhost:6100/api/v2/device/mac:112233445566/config?names=Foo -i -H "Authorization: Basic dXNlcjpwYXNz"
+curl localhost:6100/api/v2/device/mac:112233445577/config?names=Foo -i -H "Authorization: Basic dXNlcjpwYXNz"
 ```
 
 Should give you:
@@ -152,4 +159,71 @@ Content-Length: 87
 Content-Type: text/plain; charset=utf-8
 
 {"code": 404, "message": "Could not process device request: The device does not exist"}
+```
+
+Check out that your simulator is connected:
+
+```
+curl -H "Authorization: Basic dXNlcjpwYXNz" localhost:6100/api/v2/device/mac:112233445566/stat -i
+```
+
+Should give you something similar to:
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+X-Scytale-Build: development
+X-Scytale-Flavor: development
+X-Scytale-Region: local
+X-Scytale-Server: localhost
+X-Scytale-Start-Time: 10 Jun 19 06:36 UTC
+X-Talaria-Build: development
+X-Talaria-Flavor: development
+X-Talaria-Region: local
+X-Talaria-Server: localhost
+X-Talaria-Start-Time: 10 Jun 19 06:36 UTC
+X-Tr1d1um-Build: development
+X-Tr1d1um-Flavor: development
+X-Tr1d1um-Region: local
+X-Tr1d1um-Server: localhost
+X-Tr1d1um-Start-Time: 10 Jun 19 06:36 UTC
+X-Webpa-Transaction-Id: CIyqnI23RjWhyC_vNO7hbA
+X-Xmidt-Span: "http://petasos:6400/api/v2/device/mac:112233445566/stat","2019-06-10T06:38:13Z","2.947332ms"
+Date: Mon, 10 Jun 2019 06:38:13 GMT
+Content-Length: 231
+
+{"id": "mac:112233445566", "pending": 0, "statistics": {"bytesSent": 0, "messagesSent": 0, "bytesReceived": 0, "messagesReceived": 0, "duplications": 0, "connectedAt": "2019-06-10T06:37:02.915435853Z", "upTime": "1m10.110197482s"}}
+```
+
+Read a single parameter:
+
+```
+curl -H "Authorization: Basic dXNlcjpwYXNz" localhost:6100/api/v2/device/mac:112233445566/config?names=Device.DeviceInfo.X_CISCO_COM_BootloaderVersion -i
+```
+
+Results in:
+```
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+X-Scytale-Build: development
+X-Scytale-Flavor: development
+X-Scytale-Region: local
+X-Scytale-Server: localhost
+X-Scytale-Start-Time: 10 Jun 19 06:36 UTC
+X-Talaria-Build: development
+X-Talaria-Flavor: development
+X-Talaria-Region: local
+X-Talaria-Server: localhost
+X-Talaria-Start-Time: 10 Jun 19 06:36 UTC
+X-Tr1d1um-Build: development
+X-Tr1d1um-Flavor: development
+X-Tr1d1um-Region: local
+X-Tr1d1um-Server: localhost
+X-Tr1d1um-Start-Time: 10 Jun 19 06:36 UTC
+X-Webpa-Transaction-Id: cDYIIKLgoDtrt3XrVfUKkg
+X-Xmidt-Span: "http://petasos:6400/api/v2/device/send","2019-06-10T06:45:04Z","15.869854ms"
+Date: Mon, 10 Jun 2019 06:45:04 GMT
+Content-Length: 163
+
+{"parameters":[{"name":"Device.DeviceInfo.X_CISCO_COM_BootloaderVersion","value":"4.2.0.45","dataType":0,"parameterCount":1,"message":"Success"}],"statusCode":200}
 ```
