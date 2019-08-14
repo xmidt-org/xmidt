@@ -30,6 +30,8 @@
     file: "stdout"
     level: "INFO"
     json: false
+    
+  webhooksEnabled: false
 
   start:
     duration: 1
