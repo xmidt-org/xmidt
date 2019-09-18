@@ -1,1 +1,4 @@
 diagrams/*.png
+xmidt
+*vendor/
+*.out

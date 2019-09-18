@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/Comcast/webpa-common/wrp"
+	"github.com/xmidt-org/wrp-go/wrp"
 )
 
 const (
