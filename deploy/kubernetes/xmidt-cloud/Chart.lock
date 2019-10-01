@@ -1,0 +1,6 @@
+dependencies:
+- name: consul
+  repository: https://kubernetes-charts.storage.googleapis.com
+  version: 3.8.1
+digest: sha256:b6289735c401fdd1c4e506961a5128d14d603e60fc12bb91967d3a50e91a0c72
+generated: "2019-09-25T10:36:38.023910322+02:00"

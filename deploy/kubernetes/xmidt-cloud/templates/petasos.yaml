@@ -1,0 +1,165 @@
+apiVersion: v1
+data:
+  petasos.yaml: |
+    fqdn: petasos
+    env: test
+    scheme: http
+
+    primary:
+      address: ":6400"
+    health:
+      address: ":6401"
+      options:
+        - "PayloadsOverZero"
+        - "PayloadsOverHundred"
+        - "PayloadsOverThousand"
+        - "PayloadsOverTenThousand"
+    pprof:
+      address: ":6402"
+    metric:
+      address: ":6403"
+      metricsOptions:
+        namespace: "xmidt"
+        subsystem: "petasos"
+    control:
+      address: ":6404"
+
+    log:
+      file: "stdout"
+      level: "debug"
+      json: true
+
+
+    service:
+      defaultScheme: http
+      consul:
+        client:
+          address: "{{ .Release.Name }}-consul:8500"
+          scheme: "http"
+          waitTime: "30s"
+        disableGenerateID: true
+        watches:
+          -
+            service: "talaria"
+            passingOnly: true
+        vnodeCount: 211
+
+    redundancy:
+      dc1:
+        defaultScheme: http
+        consul:
+          client:
+            address: "{{ .Release.Name }}-consul:8500"
+            scheme: "http"
+            waitTime: "30s"
+          disableGenerateID: true
+          watches:
+            -
+              service: "talaria"
+              passingOnly: true
+          vnodeCount: 211
+kind: ConfigMap
+metadata:
+  labels:
+    app: xmidt-app
+  name: petasos-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: petasos-nodeport
+spec:
+  type: NodePort
+  ports:
+    - port: 6400
+  selector:
+    app: xmidt-app-petasos
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+  labels:
+    component: petasos
+    release: petasos
+  name: petasos
+spec:
+  clusterIP: None
+  ports:
+    - name: http
+      port: 6400
+      protocol: TCP
+    - name: http2
+      port: 6401
+      protocol: TCP
+    - name: http3
+      port: 6402
+      protocol: TCP
+    - name: http4
+      port: 6403
+      protocol: TCP
+  selector:
+    app: xmidt-app-petasos
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: petasos
+  labels:
+    app: xmidt-app-petasos
+spec:
+  selector:
+    matchLabels:
+      app: xmidt-app-petasos
+  updateStrategy:
+    type: RollingUpdate
+  replicas: 1
+  serviceName: xmidt-app-petasos
+  template:
+    metadata:
+      labels:
+        app: xmidt-app-petasos
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - xmidt-app-petasos
+      volumes:
+        - name: petasos-config
+          projected:
+            sources:
+              - configMap:
+                  name: petasos-config
+                  items:
+                    - key: petasos.yaml
+                      path: petasos.yaml
+                      mode: 0755
+      securityContext:
+        runAsNonRoot: false
+        runAsUser: 999
+        supplementalGroups: [999]
+      containers:
+        - image: {{ .Values.petasos.image }}
+          name: petasos
+          ports:
+            - containerPort: 6400
+              protocol: TCP
+            - containerPort: 6401
+              protocol: TCP
+            - containerPort: 6402
+              protocol: TCP
+            - containerPort: 6403
+              protocol: TCP
+            - containerPort: 6404
+              protocol: TCP
+          volumeMounts:
+            - name: petasos-config
+              mountPath: "/etc/petasos"
+              readOnly: true
