@@ -2,7 +2,7 @@
 
 ## Kubernetes
 
-Make sure you have a Kubernetes cluster ready.    
+Make sure you have a Kubernetes cluster ready.
 You can either use:
 * [minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/)
 * [kind](https://github.com/kubernetes-sigs/kind)
@@ -14,7 +14,9 @@ In order to deploy to Kubernetes (k8s), you need to setup kubectl to talk to you
 xmidt cloud components are deployed using a helm chart. Helm charts enables us to describe dependencies to 3rd party services like Consul or Prometheus.
 Make sure [helm](https://github.com/helm/helm) >= v3.0.0-beta.3 is installed on your system. [helm-quickstart](https://v3.helm.sh/docs/intro/quickstart/)
 
-If you need to make customisation (e.g. because of unique characteristics of your k8s instance) [ship](https://github.com/replicatedhq/ship) is recommended
+If you need to make customisation (e.g. because of unique characteristics of your k8s instance):
+
+[ship](https://github.com/replicatedhq/ship) is recommended
 
 ## Getting Started
 Use helm to render the chart to *rendered.yaml*:
@@ -28,6 +30,7 @@ kubectl apply -f rendered.yaml
 ```
 
 Check if all pods are running (scytale might need a couple of restarts as it depends on consul):
+
 ```
 kubectl get all
 --
@@ -63,6 +66,6 @@ kubectl delete -f rendered.yaml
 ## FAQ
 
 1. Consul pods are not running
-Consul depends on a PerstentVolumeClaim, make sure your k8s instance supports this.    
-You may also have to add annotations to the PerstentVolumeClaim section.
+Consul depends on a `PerstentVolumeClaim`, make sure your k8s instance supports this.    
+You may also have to add annotations to the `PerstentVolumeClaim` section.
 If this is the case use [ship](https://github.com/replicatedhq/ship) to customize the xmidt helm chart.
