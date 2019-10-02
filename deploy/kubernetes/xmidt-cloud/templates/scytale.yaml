@@ -1,0 +1,174 @@
+apiVersion: v1
+data:
+  scytale.yaml: |
+    fqdn: scytale
+    env: test
+    scheme: http
+
+    primary:
+      address: ":6300"
+    health:
+      address: ":6301"
+      options:
+        - "PayloadsOverZero"
+        - "PayloadsOverHundred"
+        - "PayloadsOverThousand"
+        - "PayloadsOverTenThousand"
+    pprof:
+      address: ":6302"
+    metric:
+      address: ":6303"
+      metricsOptions:
+        namespace: "xmidt"
+        subsystem: "scytale"
+
+    log:
+      file: "stdout"
+      level: "DEBUG"
+      json: false
+
+    fanout:
+      endpoints: ["http://petasos:6400/api/v2/device/send"]
+      authorization: dXNlcjpwYXNz
+      fanoutTimeout: "5s"
+      clientTimeout: "5s"
+      concurrency: 10
+
+    service:
+      consul:
+        client:
+          address: "{{ .Release.Name }}-consul:8500"
+          scheme: "http"
+        disableGenerateID: true
+        vnodeCount: 211
+        watches:
+          - service: "talaria"
+            allDatacenters: true
+            tags:
+              - "dev"
+              - "docker"
+            passingOnly: true
+        registrations:
+          - id: "scytale"
+            name: "scytale"
+            tags:
+              - "dev"
+              - "docker"
+              - "stage=dev"
+              - "flavor=docker"
+            address: "http://scytale"
+            scheme: "http"
+            port: 6200
+            checks:
+              - checkID: "talaria-0:http"
+                http: "http://scytale:6301/health"
+                interval: "30s"
+                deregisterCriticalServiceAfter: "70s"
+
+    aws:
+      accessKey: "supbro"
+      secretKey: "nahbro"
+      env: local-dev
+      sns:
+        awsEndpoint: http://goaws:4100
+        region: "us-east-1"
+        topicArn: arn:aws:sns:us-east-1:000000000000:xmidt-local-caduceus
+        urlPath: "/api/v2/aws/sns"
+    waitForDns: 0
+    authHeader: ["dXNlcjpwYXNz"]
+    start:
+      duration: 1
+      apiPath: http://caduceus:6000/hooks
+      authHeader: dXNlcjpwYXNz
+kind: ConfigMap
+metadata:
+  labels:
+    app: xmidt-app
+  name: scytale-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+  labels:
+    component: scytale
+    release: scytale
+  name: scytale
+spec:
+  clusterIP: None
+  ports:
+    - name: http0
+      port: 6300
+      protocol: TCP
+    - name: http1
+      port: 6301
+      protocol: TCP
+    - name: http2
+      port: 6302
+      protocol: TCP
+    - name: http3
+      port: 6303
+      protocol: TCP
+  selector:
+    app: xmidt-app-scytale
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: scytale
+  labels:
+    app: xmidt-app-scytale
+spec:
+  selector:
+    matchLabels:
+      app: xmidt-app-scytale
+  updateStrategy:
+    type: RollingUpdate
+  replicas: 1
+  serviceName: xmidt-app-scytale
+  template:
+    metadata:
+      labels:
+        app: xmidt-app-scytale
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - xmidt-app-scytale
+      volumes:
+        - name: scytale-config
+          projected:
+            sources:
+              - configMap:
+                  name: scytale-config
+                  items:
+                    - key: scytale.yaml
+                      path: scytale.yaml
+                      mode: 0755
+      securityContext:
+        runAsNonRoot: false
+        runAsUser: 999
+        supplementalGroups: [999]
+      containers:
+        - image: {{ .Values.scytale.image }}
+          name: scytale
+          ports:
+            - containerPort: 6300
+              protocol: TCP
+            - containerPort: 6301
+              protocol: TCP
+            - containerPort: 6302
+              protocol: TCP
+            - containerPort: 6303
+              protocol: TCP
+          volumeMounts:
+            - name: scytale-config
+              mountPath: "/etc/scytale"
+              readOnly: true

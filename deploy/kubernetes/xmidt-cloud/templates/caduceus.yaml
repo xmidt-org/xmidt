@@ -1,0 +1,185 @@
+apiVersion: v1
+data:
+  caduceus.yaml: |
+    primary:
+      address: ":6000"
+    health:
+      address: ":6001"
+      options:
+        - "PayloadsOverZero"
+        - "PayloadsOverHundred"
+        - "PayloadsOverThousand"
+        - "PayloadsOverTenThousand"
+    pprof:
+      address: ":6002"
+    metric:
+      address: ":6003"
+      metricsOptions:
+        namespace: "xmidt"
+        subsystem: "caduceus"
+    log:
+      file: "stdout"
+      level: "DEBUG"
+      json: false
+    env: test
+    fqdn: caduceus
+    scheme: http
+
+    numWorkerThreads: 10
+    jobQueueSize: 10
+    sender:
+      numWorkersPerSender: 5000
+      queueSizePerSender: 100000
+      cutOffPeriod: 10s
+      linger: 180s
+      clientTimeout: 60s
+      deliveryRetries: 1
+      deliveryInterval: 10ms
+      responseHeaderTimeout: 10s
+    profilerFrequency: 15
+    profilerDuration: 15
+    profilerQueueSize: 100
+    totalIncomingPayloadSizeBuckets:
+      - 100
+      - 1000
+      - 10000
+    perSourceIncomingPayloadSizeBuckets:
+      - 100
+      - 1000
+      - 10000
+
+    aws:
+      accessKey: "supbro"
+      secretKey: "nahbro"
+      env: local-dev
+      sns:
+        awsEndpoint: http://goaws:4100
+        region: "us-east-1"
+        topicArn: arn:aws:sns:us-east-1:000000000000:xmidt-local-caduceus
+        urlPath: "/api/v2/aws/sns"
+    waitForDns: 0
+    authHeader: ["dXNlcjpwYXNz"]
+    start:
+      duration: 1
+      apiPath: http://caduceus:6000/hooks
+      authHeader: dXNlcjpwYXNz
+
+    service:
+      defaultScheme: http
+      consul:
+        client:
+          address: "{{ .Release.Name }}-consul:8500"
+          scheme: "http"
+          waitTime: "30s"
+        disableGenerateID: true
+        vnodeCount: 211
+        registrations:
+          -
+            id: "caduceus"
+            name: "caduceus"
+            tags:
+              - "dev"
+              - "docker"
+              - "stage=dev"
+              - "flavor=docker"
+            address: "http://caduceus"
+            scheme: "http"
+            port: 6000
+            checks:
+              -
+                checkID: "caduceus:http"
+                http: "http://caduceus:6001/health"
+                interval: "30s"
+                deregisterCriticalServiceAfter: "70s"
+kind: ConfigMap
+metadata:
+  labels:
+    app: xmidt-app
+  name: caduceus-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+  labels:
+    component: caduceus
+    release: caduceus
+  name: caduceus
+spec:
+  clusterIP: None
+  ports:
+    - name: http0
+      port: 6000
+      protocol: TCP
+    - name: http1
+      port: 6001
+      protocol: TCP
+    - name: http2
+      port: 6002
+      protocol: TCP
+    - name: http3
+      port: 6003
+      protocol: TCP
+  selector:
+    app: xmidt-app-caduceus
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: caduceus
+  labels:
+    app: xmidt-app-caduceus
+spec:
+  selector:
+    matchLabels:
+      app: xmidt-app-caduceus
+  updateStrategy:
+    type: RollingUpdate
+  replicas: 1
+  serviceName: xmidt-app-caduceus
+  template:
+    metadata:
+      labels:
+        app: xmidt-app-caduceus
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - xmidt-app-caduceus
+      volumes:
+        - name: caduceus-config
+          projected:
+            sources:
+              - configMap:
+                  name: caduceus-config
+                  items:
+                    - key: caduceus.yaml
+                      path: caduceus.yaml
+                      mode: 0755
+      securityContext:
+        runAsNonRoot: false
+        runAsUser: 999
+        supplementalGroups: [999]
+      containers:
+        - image: {{ .Values.caduceus.image }}
+          name: caduceus
+          ports:
+            - containerPort: 6000
+              protocol: TCP
+            - containerPort: 6001
+              protocol: TCP
+            - containerPort: 6002
+              protocol: TCP
+            - containerPort: 6003
+              protocol: TCP
+          volumeMounts:
+            - name: caduceus-config
+              mountPath: "/etc/caduceus"
+              readOnly: true

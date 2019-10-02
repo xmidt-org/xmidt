@@ -1,0 +1,23 @@
+# Default values for xmitd-cloud.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+caduceus:
+    image: xmidt/caduceus
+
+scytale:
+    image: xmidt/scytale
+
+petasos:
+    image: xmidt/petasos
+
+simulator:
+    image: xmidt/rdkb-simulator
+
+talaria:
+    image: xmidt/talaria
+
+tr1d1um:
+    image: xmidt/tr1d1um
+
+
