@@ -1,7 +1,7 @@
 version: '3.4'
 services:
   caduceus:
-    image: caduceus:${CADUCEUS_VERSION}
+    image: xmidt/caduceus:${CADUCEUS_VERSION}
     ports:
       - 6000:6000
       - 6001:6001
@@ -15,7 +15,7 @@ services:
       - xmidt
 
   tr1d1um:
-    image: tr1d1um:${TR1D1UM_VERSION}
+    image: xmidt/tr1d1um:${TR1D1UM_VERSION}
     ports:
       - 6100:6100
       - 6101:6101
@@ -29,7 +29,7 @@ services:
       - xmidt
 
   scytale:
-    image: scytale:${SCYTALE_VERSION}
+    image: xmidt/scytale:${SCYTALE_VERSION}
     ports:
       - 6300:6300
       - 6301:6301
@@ -68,7 +68,7 @@ services:
 
 # Mark petasos Services
   petasos: &petasos
-    image: petasos:${PETASOS_VERSION}
+    image: xmidt/petasos:${PETASOS_VERSION}
     ports:
       - 6400:6400
       - 6401:6401
@@ -84,7 +84,7 @@ services:
 
 # Mark Talaria Services
   talaria-0: &talaria
-    image: talaria:${TALARIA_VERSION}
+    image: xmidt/talaria:${TALARIA_VERSION}
     ports:
       - 6200:6200
       - 6201:6201

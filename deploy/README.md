@@ -8,83 +8,28 @@ In order to deploy into Docker, make sure [Docker is installed](https://docs.doc
 _note:_ While tr1d1um is not part of XMiDT(it is WebPA) it is recommend to be
 brought up for current ease of use. Future releases will deprecate tr1d1um.
 
-1. Have the services you want to bring up built (Talaria, Scytale, etc.).
+1. Clone this repository
 
-  - Build the images locally
-  ```bash
-git clone git@github.com:Comcast/xmidt.git
-git clone git@github.com:Comcast/talaria.git
-git clone git@github.com:Comcast/scytale.git
-git clone git@github.com:Comcast/petasos.git
-git clone git@github.com:Comcast/caduceus.git
-git clone git@github.com:Comcast/tr1d1um.git
+2. Run `deploy/docker-compose/deploy.sh`
+   
+    This will build `simulator` and `goaws` locally. It will then run `docker-compose up` which uses images of `talaria`, `scytale`, `petasos`, `caduceus`, and `tr1d1um` from dockerhub. 
 
-cd talaria
-docker build -t talaria:local .
-cd ..
+    To pull specific versions of the images, just set the `<SERVICE>_VERSION` env variables when running the shell script.
 
-cd scytale
-docker build -t scytale:local .
-cd ..
+    ```
+    TALARIA_VERSION=x.x.x deploy/docker-compose/deploy.sh
+    ```
 
-cd petasos
-docker build -t petasos:local .
-cd ..
+    If you only want to bring up, for example, the scytale and talaria, run:
+    _note_: bringup a subset can cause problems
+    ```bash
+    deploy/docker-compose/deploy.sh scytale talaria
+    ```
+    This can be done with any combination of services and the database.
 
-cd caduceus
-docker build -t caduceus:local .
-cd ..
-
-cd tr1d1um
-docker build -t tr1d1um:local .
-cd ..
-
-cd xmidt/simulator
-docker build -t simulator:local .
-cd ../..
-  ```
-
-  _note_: for building goaws:local since master breaks docker networking
-  ```
-  git clone git@github.com:kcajmagic/goaws.git
-  cd goaws
-  git checkout adding_http_support
-  docker build -t goaws:local .
-  ```
-
-2. Set an environment variables relevant for the services you are deploying. If
-   you aren't using locally built images, replace `local` with the correct tag:
-   _note_ currently the images are not hosted anywhere
+3. To bring the containers down:
    ```bash
-   export TALARIA_VERSION=local
-   export SCYTALE_VERSION=local
-   export CADUCEUS_VERSION=local
-   export PETASOS_VERSION=local
-
-   # This is the client code setup to run locally.
-   export SIMULATOR_VERSION=local
-
-   # This is WebPA not XMiDT
-   export TR1D1UM_VERSION=local
-   ```
-   If you don't want to set environment variables, set them inline with each
-   `docker-compose` command below.
-
-3. To bring the containers up run:
-   ```bash
-   cd xmidt/deploy/docker-compose
-   docker-compose up -d
-   ```
-   If you only want to bring up, for example, the scytale and talaria, run:
-   _note_: bringup a subset can cause problems
-   ```bash
-   docker-compose up -d scytale talaria
-   ```
-   This can be done with any combination of services and the database.
-
-4. To bring the containers down:
-   ```bash
-   docker-compose down
+   docker-compose -f deploy/docker-compose/docker-compose.yml down
    ```
 
 ### INFO
