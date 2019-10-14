@@ -35,6 +35,7 @@ Caduceus provides the pub-sub message delivery mechanism for XMiDT.
 [![Code Climate](https://codeclimate.com/github/xmidt-org/caduceus/badges/gpa.svg)](https://codeclimate.com/github/xmidt-org/caduceus)
 [![Issue Count](https://codeclimate.com/github/xmidt-org/caduceus/badges/issue_count.svg)](https://codeclimate.com/github/xmidt-org/caduceus)
 [![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/xmidt-org/caduceus/blob/master/LICENSE)
+[![Release](https://img.shields.io/github/v/release/xmidt-org/caduceus.svg)](https://github.com/xmidt-org/caduceus/releases/latest)
 
 
 ### [Scytale](https://github.com/xmidt-org/scytale)
@@ -47,6 +48,7 @@ Scytale accepts the inbound requests, fans out across data centers and delivers 
 [![Code Climate](https://codeclimate.com/github/xmidt-org/scytale/badges/gpa.svg)](https://codeclimate.com/github/xmidt-org/scytale)
 [![Issue Count](https://codeclimate.com/github/xmidt-org/scytale/badges/issue_count.svg)](https://codeclimate.com/github/xmidt-org/scytale)
 [![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/xmidt-org/scytale/blob/master/LICENSE)
+[![Release](https://img.shields.io/github/v/release/xmidt-org/scytale.svg)](https://github.com/xmidt-org/scytale/releases/latest)
 
 
 ### [Talaria](https://github.com/xmidt-org/talaria)
@@ -59,6 +61,7 @@ Talaria maintains the secure websocket connections from the device and passes th
 [![Code Climate](https://codeclimate.com/github/xmidt-org/talaria/badges/gpa.svg)](https://codeclimate.com/github/xmidt-org/talaria)
 [![Issue Count](https://codeclimate.com/github/xmidt-org/talaria/badges/issue_count.svg)](https://codeclimate.com/github/xmidt-org/talaria)
 [![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/xmidt-org/talaria/blob/master/LICENSE)
+[![Release](https://img.shields.io/github/v/release/xmidt-org/talaria.svg)](https://github.com/xmidt-org/talaria/releases/latest)
 
 
 ### [Petasos](https://github.com/xmidt-org/petasos)
@@ -71,6 +74,7 @@ Petasos helps reduce the load on the Talaria machines during mass reboot cases b
 [![Code Climate](https://codeclimate.com/github/xmidt-org/petasos/badges/gpa.svg)](https://codeclimate.com/github/xmidt-org/petasos)
 [![Issue Count](https://codeclimate.com/github/xmidt-org/petasos/badges/issue_count.svg)](https://codeclimate.com/github/xmidt-org/petasos)
 [![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/xmidt-org/petasos/blob/master/LICENSE)
+[![Release](https://img.shields.io/github/v/release/xmidt-org/petasos.svg)](https://github.com/xmidt-org/petasos/releases/latest)
 
 ### [Mnemosyne](https://github.com/xmidt-org/mnemosyne)
 
@@ -86,6 +90,7 @@ Parodus is the light weight client that reaches out to the XMiDT cloud to establ
 [![codecov.io](http://codecov.io/github/xmidt-org/parodus/coverage.svg?branch=master)](http://codecov.io/github/xmidt-org/parodus?branch=master)
 [![Coverity](https://img.shields.io/coverity/scan/11192.svg)](https://scan.coverity.com/projects/comcast-parodus)
 [![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/xmidt-org/parodus/blob/master/LICENSE)
+[![Release](https://img.shields.io/github/v/release/xmidt-org/parodus.svg)](https://github.com/xmidt-org/parodus/releases/latest)
 
 ## Server Support Libraries
 
@@ -94,30 +99,35 @@ Parodus is the light weight client that reaches out to the XMiDT cloud to establ
 [![Build Status](https://travis-ci.com/xmidt-org/webpa-common.svg?branch=master)](https://travis-ci.com/xmidt-org/webpa-common) 
 [![codecov.io](http://codecov.io/github/xmidt-org/webpa-common/coverage.svg?branch=master)](http://codecov.io/github/xmidt-org/webpa-common?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/xmidt-org/webpa-common)](https://goreportcard.com/report/github.com/xmidt-org/webpa-common)
+[![Release](https://img.shields.io/github/v/release/xmidt-org/webpa-common.svg)](https://github.com/xmidt-org/webpa-common/releases/latest)
 
 ### [kratos](https://github.com/xmidt-org/kratos)
 
 [![Build Status](https://travis-ci.com/xmidt-org/kratos.svg?branch=master)](https://travis-ci.com/xmidt-org/kratos)
 [![codecov.io](http://codecov.io/github/xmidt-org/kratos/coverage.svg?branch=master)](http://codecov.io/github/xmidt-org/kratos?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/xmidt-org/kratos)](https://goreportcard.com/report/github.com/xmidt-org/kratos)
+[![Release](https://img.shields.io/github/v/release/xmidt-org/kratos.svg)](https://github.com/xmidt-org/kratos/releases/latest)
 
 ### [golang-money](https://github.com/xmidt-org/golang-money)
 
 [![Build Status](https://travis-ci.com/xmidt-org/golang-money.svg?branch=master)](https://travis-ci.com/xmidt-org/golang-money) 
 [![codecov.io](http://codecov.io/github/xmidt-org/golang-money/coverage.svg?branch=master)](http://codecov.io/github/xmidt-org/golang-money?branch=master) 
 [![Go Report Card](https://goreportcard.com/badge/github.com/xmidt-org/golang-money)](https://goreportcard.com/report/github.com/xmidt-org/golang-money) 
+[![Release](https://img.shields.io/github/v/release/xmidt-org/golang-money.svg)](https://github.com/xmidt-org/golang-money/releases/latest)
 
 ### [tr18b1e](https://github.com/xmidt-org/tr18b1e)
 
 [![Build Status](https://travis-ci.com/xmidt-org/tr18b1e.svg?branch=master)](https://travis-ci.com/xmidt-org/tr18b1e)
 [![codecov.io](http://codecov.io/github/xmidt-org/tr18b1e/coverage.svg?branch=master)](http://codecov.io/github/xmidt-org/tr18b1e?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/xmidt-org/tr18b1e)](https://goreportcard.com/report/github.com/xmidt-org/tr18b1e)
+[![Release](https://img.shields.io/github/v/release/xmidt-org/tr18b1e.svg)](https://github.com/xmidt-org/tr18b1e/releases/latest)
 
 ### [golang-discovery-client](https://github.com/xmidt-org/golang-discovery-client)
 
 [![Build Status](https://travis-ci.com/xmidt-org/golang-discovery-client.svg?branch=master)](https://travis-ci.com/xmidt-org/golang-discovery-client) 
 [![codecov.io](http://codecov.io/github/xmidt-org/golang-discovery-client/coverage.svg?branch=master)](http://codecov.io/github/xmidt-org/golang-discovery-client?branch=master) 
 [![Go Report Card](https://goreportcard.com/badge/github.com/xmidt-org/golang-discovery-client)](https://goreportcard.com/report/github.com/xmidt-org/golang-discovery-client) 
+[![Release](https://img.shields.io/github/v/release/xmidt-org/golang-discovery-client.svg)](https://github.com/xmidt-org/golang-discovery-client/releases/latest)
 
 ## Client Support Libraries
 
@@ -129,6 +139,7 @@ Parodus is the light weight client that reaches out to the XMiDT cloud to establ
 [![codecov.io](http://codecov.io/github/xmidt-org/cimplog/coverage.svg?branch=master)](http://codecov.io/github/xmidt-org/cimplog?branch=master)
 [![Coverity](https://img.shields.io/coverity/scan/11572.svg)]("https://scan.coverity.com/projects/comcast-cimplog)
 [![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/xmidt-org/cimplog/blob/master/LICENSE.txt)
+[![Release](https://img.shields.io/github/v/release/xmidt-org/cimplog.svg)](https://github.com/xmidt-org/cimplog/releases/latest)
 
 ### [seshat](https://github.com/xmidt-org/seshat)
 
@@ -136,6 +147,7 @@ Parodus is the light weight client that reaches out to the XMiDT cloud to establ
 [![codecov.io](http://codecov.io/github/xmidt-org/seshat/coverage.svg?branch=master)](http://codecov.io/github/xmidt-org/seshat?branch=master)
 [![Coverity](https://img.shields.io/coverity/scan/11941.svg)]("https://scan.coverity.com/projects/comcast-seshat)
 [![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/xmidt-org/seshat/blob/master/LICENSE.txt)
+[![Release](https://img.shields.io/github/v/release/xmidt-org/seshat.svg)](https://github.com/xmidt-org/seshat/releases/latest)
 
 ### [cjwt](https://github.com/xmidt-org/cjwt)
 
@@ -143,6 +155,7 @@ Parodus is the light weight client that reaches out to the XMiDT cloud to establ
 [![codecov.io](http://codecov.io/github/xmidt-org/cjwt/coverage.svg?branch=master)](http://codecov.io/github/xmidt-org/cjwt?branch=master)
 [![Coverity](https://img.shields.io/coverity/scan/11926.svg)]("https://scan.coverity.com/projects/comcast-cjwt)
 [![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/xmidt-org/cjwt/blob/master/LICENSE.txt)
+[![Release](https://img.shields.io/github/v/release/xmidt-org/caduceus.svg)](https://github.com/xmidt-org/caduceus/releases/latest)
 
 ### [cjson-extras](https://github.com/xmidt-org/cjson-extras)
 
@@ -154,8 +167,10 @@ Parodus is the light weight client that reaches out to the XMiDT cloud to establ
 [![codecov.io](http://codecov.io/github/xmidt-org/wrp-c/coverage.svg?branch=master)](http://codecov.io/github/xmidt-org/wrp-c?branch=master)
 [![Coverity](https://img.shields.io/coverity/scan/9155.svg)]("https://scan.coverity.com/projects/comcast-wrp-c)
 [![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/xmidt-org/wrp-c/blob/master/LICENSE.txt)
+[![Release](https://img.shields.io/github/v/release/xmidt-org/wrp-c.svg)](https://github.com/xmidt-org/wrp-c/releases/latest)
 
 ### [trower-base64](https://github.com/xmidt-org/trower-base64)
 
 [![Build Status](https://travis-ci.com/xmidt-org/trower-base64.svg?branch=master)](https://travis-ci.com/xmidt-org/trower-base64) [![codecov.io](http://codecov.io/github/xmidt-org/trower-base64/coverage.svg?branch=master)](http://codecov.io/github/xmidt-org/trower-base64?branch=master)
 [![coverity](https://img.shields.io/coverity/scan/9029.svg)](https://scan.coverity.com/projects/trower-base64)
+[![Release](https://img.shields.io/github/v/release/xmidt-org/trower-base64.svg)](https://github.com/xmidt-org/trower-base64/releases/latest)
