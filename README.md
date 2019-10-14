@@ -1,16 +1,33 @@
-# xmidt
+# XMiDT
 
 Xmidt (pronounced "transmit") is a combination of a server cluster and client that provide a highly available data path to devices deployed all over the world.
 
-# tl;dr summary
+## Summary
 
-A device connects to the xmidt cloud via the xmidt client.  Cloud based services can use the xmidt cloud api to send and receive messages from the devices without needing to worry about where the device is in the world or in the network.  Push and pull data from the device with ease.
+A device connects to the XMiDT cloud via the XMiDT client.  Cloud based services can use the XMiDT cloud api to send and receive messages from the devices without needing to worry about where the device is in the world or in the network.  Push and pull data from the device with ease.
 
-# the xmidt servers
+## Table of Contents
 
-### [caduceus](https://github.com/xmidt-org/caduceus)
+- [Code of Conduct](#code-of-conduct)
+- [XMiDT Servers](#xmidt-servers)
+  - [Caduceus](#caduceus)
+  - [Scytale](#scytale)
+  - [Talaria](#talaria)
+  - [Petasos](#petasos)
+- [XMiDT Client](#xmidt-client)
+- [Server Support Libraries](#server-support-libraries)
+- [Client Support Libraries](#client-support-libraries)
 
-Caduceus provides the pub-sub message delivery mechanism for xmidt.
+## Code of Conduct
+
+This project and everyone participating in it are governed by the [XMiDT Code Of Conduct](https://xmidt.io/code_of_conduct/). 
+By participating, you agree to this Code.
+
+## XMiDT Servers
+
+### [Caduceus](https://github.com/xmidt-org/caduceus)
+
+Caduceus provides the pub-sub message delivery mechanism for XMiDT.
 
 [![Build Status](https://travis-ci.com/xmidt-org/caduceus.svg?branch=master)](https://travis-ci.com/xmidt-org/caduceus) 
 [![codecov.io](http://codecov.io/github/xmidt-org/caduceus/coverage.svg?branch=master)](http://codecov.io/github/xmidt-org/caduceus?branch=master)
@@ -20,7 +37,7 @@ Caduceus provides the pub-sub message delivery mechanism for xmidt.
 [![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/xmidt-org/caduceus/blob/master/LICENSE)
 
 
-### [scytale](https://github.com/xmidt-org/scytale)
+### [Scytale](https://github.com/xmidt-org/scytale)
 
 Scytale accepts the inbound requests, fans out across data centers and delivers the messages to the Talaria machines that could be hosting the device connection.
 
@@ -32,7 +49,7 @@ Scytale accepts the inbound requests, fans out across data centers and delivers 
 [![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/xmidt-org/scytale/blob/master/LICENSE)
 
 
-### [talaria](https://github.com/xmidt-org/talaria)
+### [Talaria](https://github.com/xmidt-org/talaria)
 
 Talaria maintains the secure websocket connections from the device and passes the messages from or to the device.
 
@@ -44,7 +61,7 @@ Talaria maintains the secure websocket connections from the device and passes th
 [![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/xmidt-org/talaria/blob/master/LICENSE)
 
 
-### [petasos](https://github.com/xmidt-org/petasos)
+### [Petasos](https://github.com/xmidt-org/petasos)
 
 Petasos helps reduce the load on the Talaria machines during mass reboot cases by calculating which specific Talaria a device should connect to & redirecting the incoming request.
 
@@ -55,22 +72,22 @@ Petasos helps reduce the load on the Talaria machines during mass reboot cases b
 [![Issue Count](https://codeclimate.com/github/xmidt-org/petasos/badges/issue_count.svg)](https://codeclimate.com/github/xmidt-org/petasos)
 [![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/xmidt-org/petasos/blob/master/LICENSE)
 
-### [mnemosyne](https://github.com/xmidt-org/mnemosyne)
+### [Mnemosyne](https://github.com/xmidt-org/mnemosyne)
 
 Mnemosyne provides a mapping between names of devices.
 
-# the xmidt client
+## XMiDT Client
 
-### [parodus](https://github.com/xmidt-org/parodus)
+### [Parodus](https://github.com/xmidt-org/parodus)
 
-Parodus is the light weight client that reaches out to the xmidt cloud to establish the connection.
+Parodus is the light weight client that reaches out to the XMiDT cloud to establish the connection.
 
 [![Build Status](https://travis-ci.com/xmidt-org/parodus.svg?branch=master)](https://travis-ci.com/xmidt-org/parodus)
 [![codecov.io](http://codecov.io/github/xmidt-org/parodus/coverage.svg?branch=master)](http://codecov.io/github/xmidt-org/parodus?branch=master)
 [![Coverity](https://img.shields.io/coverity/scan/11192.svg)](https://scan.coverity.com/projects/comcast-parodus)
 [![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/xmidt-org/parodus/blob/master/LICENSE)
 
-# server support libraries
+## Server Support Libraries
 
 ### [webpa-common](https://github.com/xmidt-org/webpa-common)
 
@@ -102,7 +119,7 @@ Parodus is the light weight client that reaches out to the xmidt cloud to establ
 [![codecov.io](http://codecov.io/github/xmidt-org/golang-discovery-client/coverage.svg?branch=master)](http://codecov.io/github/xmidt-org/golang-discovery-client?branch=master) 
 [![Go Report Card](https://goreportcard.com/badge/github.com/xmidt-org/golang-discovery-client)](https://goreportcard.com/report/github.com/xmidt-org/golang-discovery-client) 
 
-# client support libraries
+## Client Support Libraries
 
 ### [nopoll fork](https://github.com/xmidt-org/nopoll)
 
