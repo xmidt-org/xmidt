@@ -1,1 +1,6 @@
 diagrams/*.png
+
+rendered.*
+./deploy/kubernetes/helm/xmidt-cloud-ship/
+./deploy/kubernetes/helm/charts/
+./deploy/kubernetes/helm/.tmp/

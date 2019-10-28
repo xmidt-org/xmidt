@@ -21,7 +21,7 @@ If you need to make customisation (e.g. because of unique characteristics of you
 ## Getting Started
 Use helm to render the chart to *rendered.yaml*:
 ```
-helm template xmidt-cloud ./xmidt-cloud/ > rendered.yaml
+helm template xmidt-cloud ./deploy/kubernetes/helm/xmidt-cloud/ > rendered.yaml
 ```
 
 Now you can deploy the rendered chart to your k8s cluster:
@@ -35,7 +35,6 @@ Check if all pods are running (scytale might need a couple of restarts as it dep
 kubectl get all
 --
 pod/caduceus-0                  1/1       Running   0          5d
-pod/home-gateway-service-0      1/1       Running   0          22h
 pod/petasos-0                   1/1       Running   0          5d
 pod/prometheus-0                1/1       Running   0          5d
 pod/rdkb-simulator-0            1/1       Running   0          5d

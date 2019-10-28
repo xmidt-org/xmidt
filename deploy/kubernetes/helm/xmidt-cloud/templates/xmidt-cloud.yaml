@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: petasos-nodeport
+spec:
+  type: NodePort
+  ports:
+    - port: 6400
+  selector:
+    app: xmidt-app-petasos
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tr1d1um-nodeport
+spec:
+  type: NodePort
+  ports:
+    - port: 6100
+  selector:
+    app: xmidt-app-tr1d1um
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: scytale-nodeport
+spec:
+  type: NodePort
+  ports:
+    - port: 6300
+  selector:
+    app: xmidt-app-scytale
