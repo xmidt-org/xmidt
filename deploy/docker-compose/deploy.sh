@@ -22,5 +22,5 @@ SCYTALE_VERSION=${SCYTALE_VERSION:-0.1.5} \
 PETASOS_VERSION=${PETASOS_VERSION:-0.1.4} \
 TALARIA_VERSION=${TALARIA_VERSION:-0.1.3} \
 SIMULATOR_VERSION=${SIMULATOR_VERSION:-local} \
-docker-compose -f deploy/docker-compose/docker-compose.yml up -d $@
+docker-compose -f $ROOT_DIR/deploy/docker-compose/docker-compose.yml up -d $@
 
