@@ -62,6 +62,14 @@ You can delete your deployment with:
 kubectl delete -f rendered.yaml
 ```
 
+## Updating this chart
+If you make changes to a chart in a child reposiroties like talaria, etc. you can use the *Makefile* in *helm* to update this chart to the newest version.
+```
+cd helm
+make update-latest
+```
+It will download all child charts and package them into *xmidt-cloud/charts*
+
 ## FAQ
 
 1. Consul pods are not running
