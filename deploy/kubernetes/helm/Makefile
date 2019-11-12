@@ -1,6 +1,6 @@
 
 #TODO  change this to xmidt
-REPO_USER := equanox
+REPO_USER := xmidt
 
 # download xmidt-cloud dependencies to local folder ./charts
 .PHONY: charts
