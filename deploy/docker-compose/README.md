@@ -5,8 +5,8 @@
 In order to deploy into Docker, make sure [Docker is installed](https://docs.docker.com/install/).
 
 #### Deploy
-_note:_ While tr1d1um is not part of XMiDT(it is WebPA) it is recommend to be
-brought up for current ease of use. Future releases will deprecate tr1d1um.
+_**Note**_: While Tr1d1um is not part of XMiDT(it is WebPA), it is recommended to be
+brought up for current ease of use. Future releases will deprecate Tr1d1um.
 
 1. Clone this repository
 
@@ -21,11 +21,12 @@ brought up for current ease of use. Future releases will deprecate tr1d1um.
     ```
 
     If you only want to bring up, for example, the scytale and talaria, run:
-    _note_: bringup a subset can cause problems
     ```bash
     deploy/docker-compose/deploy.sh scytale talaria
     ```
-    This can be done with any combination of services and the database.
+    _**Note**_: Bringing up a subset of services can cause problems.
+    
+    This can be done with any combination of services.
 
 3. To bring the containers down:
    ```bash
@@ -33,16 +34,16 @@ brought up for current ease of use. Future releases will deprecate tr1d1um.
    ```
 
 ### INFO
-The docker-compose file provides 1 full datacenter with on talaria in a "backup"
-datacenter. since this is just pure docker no swarm or kubernetes its easiest to
-deal with just one dc, and since all ports are exposed the names might seem a little weird.
+The docker-compose file provides 1 full datacenter with one talaria in a "backup"
+datacenter. Since this is pure docker, not swarm or kubernetes, it's easiest to
+deal with just one datacenter. Since all ports are exposed, the names might seem a little weird.
 
 #### Connection
 ##### Inside Docker
-If the parodus instance is inside of docker, life is easy just connect to the cluster with `petasos:6400`
+If the Parodus instance is inside of docker, life is easy! Just connect to the cluster with `petasos:6400`.
 
 ##### Outside Docker
-if you the agent is outside of docker and the ports are exposed correctly life
+if the Parodus instance is outside of docker and the ports are exposed correctly, life
 will be hard since you will need to handle the redirect.
 You can initially connect to 'localhost:6400' but on the redirect change `talaria-1:6210` to `localhost:6210`
 
@@ -171,3 +172,4 @@ Date: Mon, 10 Jun 2019 06:45:04 GMT
 Content-Length: 163
 
 {"parameters":[{"name":"Device.DeviceInfo.X_CISCO_COM_BootloaderVersion","value":"4.2.0.45","dataType":0,"parameterCount":1,"message":"Success"}],"statusCode":200}
+```
