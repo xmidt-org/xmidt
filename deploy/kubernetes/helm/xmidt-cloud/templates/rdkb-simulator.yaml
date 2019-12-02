@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rdkb-simulator
+  labels:
+    app: xmidt-app-rdkb-simulator
+spec:
+  selector:
+    matchLabels:
+      app: xmidt-app-rdkb-simulator
+  updateStrategy:
+    type: RollingUpdate
+  replicas: 1
+  serviceName: xmidt-app
+  template:
+    metadata:
+      labels:
+        app: xmidt-app-rdkb-simulator
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - xmidt-app-rdkb-simulator
+      containers:
+        - image: {{ .Values.simulator.image }}
+          name: rdkb-simulator
+          command:
+            - /usr/bin/simulate
+          env:
+            - name: URL
+              value: "http://petasos:6400"
