@@ -1,6 +1,5 @@
 
-#TODO  change this to xmidt
-REPO_USER := xmidt
+REPO_USER := xmidt-org
 
 # download xmidt-cloud dependencies to local folder ./charts
 .PHONY: charts
