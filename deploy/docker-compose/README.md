@@ -55,7 +55,7 @@ Once connected you should see it connected via [metrics](http://localhost:9090/g
 
 Checkout that petasos is working:
 ```
-curl localhost:6400 -H "X-Webpa-Device-Name: mac:112233445566" -i
+curl -i -H "X-Webpa-Device-Name: mac:112233445566" "http://localhost:6400"
 ```
 
 Should give you the following:
@@ -76,7 +76,7 @@ Content-Length: 57
 
 Checkout that tr1d1um is able to talk with scytale & talaria:
 ```
-curl localhost:6100/api/v2/device/mac:112233445577/config?names=Foo -i -H "Authorization: Basic dXNlcjpwYXNz"
+curl -i -H "Authorization: Basic dXNlcjpwYXNz" "http://localhost:6100/api/v2/device/mac:112233445577/config?names=Foo"
 ```
 
 Should give you:
@@ -110,7 +110,7 @@ Content-Type: text/plain; charset=utf-8
 Check out that your simulator is connected:
 
 ```
-curl -H "Authorization: Basic dXNlcjpwYXNz" localhost:6100/api/v2/device/mac:112233445566/stat -i
+curl -i -H "Authorization: Basic dXNlcjpwYXNz" "http://localhost:6100/api/v2/device/mac:112233445566/stat"
 ```
 
 Should give you something similar to:
@@ -144,7 +144,7 @@ Content-Length: 231
 Read a single parameter:
 
 ```
-curl -H "Authorization: Basic dXNlcjpwYXNz" localhost:6100/api/v2/device/mac:112233445566/config?names=Device.DeviceInfo.X_CISCO_COM_BootloaderVersion -i
+curl -i -H "Authorization: Basic dXNlcjpwYXNz" "http://localhost:6100/api/v2/device/mac:112233445566/config?names=Device.DeviceInfo.X_CISCO_COM_BootloaderVersion"
 ```
 
 Results in:
