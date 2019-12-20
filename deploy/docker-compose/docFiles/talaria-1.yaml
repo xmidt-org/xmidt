@@ -54,6 +54,14 @@
   eventMap:
     default: http://caduceus:6000/api/v3/notify
 
+  jwtValidators:
+    -
+      keys:
+        Factory:
+            uri: "http://themis:6500/keys/{keyId}"
+        purpose: 0
+        updateInterval: 604800000000000
+
   service:
     defaultScheme: http
     consul:
