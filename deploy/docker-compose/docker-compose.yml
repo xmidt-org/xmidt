@@ -28,6 +28,43 @@ services:
     networks:
       - xmidt
 
+# Mark Talaria Services
+  talaria-0: &talaria
+    image: xmidt/talaria:${TALARIA_VERSION}
+    ports:
+      - 6200:6200
+      - 6201:6201
+      - 6202:6202
+      - 6203:6203
+      - 6204:6204
+    depends_on:
+      - consul0
+      - themis
+    volumes:
+      - ./docFiles/talaria-0.yaml:/etc/talaria/talaria.yaml
+    networks:
+      - xmidt
+  talaria-1:
+    <<: *talaria
+    ports:
+      - 6210:6210
+      - 6211:6211
+      - 6212:6212
+      - 6213:6213
+      - 6214:6214
+    volumes:
+      - ./docFiles/talaria-1.yaml:/etc/talaria/talaria.yaml
+  talaria-2:
+    <<: *talaria
+    ports:
+      - 6220:6220
+      - 6221:6221
+      - 6222:6222
+      - 6223:6223
+      - 6224:6224
+    volumes:
+      - ./docFiles/talaria-2.yaml:/etc/talaria/talaria.yaml
+
   scytale:
     image: xmidt/scytale:${SCYTALE_VERSION}
     ports:
@@ -40,6 +77,34 @@ services:
       - petasos
     volumes:
       - ./docFiles/scytale.yaml:/etc/scytale/scytale.yaml
+    networks:
+      - xmidt
+
+# Mark petasos Services
+  petasos: &petasos
+    image: xmidt/petasos:${PETASOS_VERSION}
+    ports:
+      - 6400:6400
+      - 6401:6401
+      - 6402:6402
+      - 6403:6403
+      - 6404:6404
+    depends_on:
+      - consul0
+    volumes:
+      - ./docFiles/petasos.yaml:/etc/petasos/petasos.yaml
+    networks:
+      - xmidt
+
+  themis:
+    image: xmidt/themis:${THEMIS_VERSION}
+    ports:
+      - 6500:6500
+      - 6501:6501
+      - 6502:6502
+      - 6503:6503
+    volumes:
+      - ./docFiles/themis.yaml:/themis.yaml
     networks:
       - xmidt
 
@@ -66,57 +131,6 @@ services:
       - ./docFiles/prometheus.yml:/prometheus-data/prometheus.yml
     command:  --log.level=debug --config.file=/prometheus-data/prometheus.yml
 
-# Mark petasos Services
-  petasos: &petasos
-    image: xmidt/petasos:${PETASOS_VERSION}
-    ports:
-      - 6400:6400
-      - 6401:6401
-      - 6402:6402
-      - 6403:6403
-      - 6404:6404
-    depends_on:
-      - consul0
-    volumes:
-      - ./docFiles/petasos.yaml:/etc/petasos/petasos.yaml
-    networks:
-      - xmidt
-
-# Mark Talaria Services
-  talaria-0: &talaria
-    image: xmidt/talaria:${TALARIA_VERSION}
-    ports:
-      - 6200:6200
-      - 6201:6201
-      - 6202:6202
-      - 6203:6203
-      - 6204:6204
-    depends_on:
-      - consul0
-    volumes:
-      - ./docFiles/talaria-0.yaml:/etc/talaria/talaria.yaml
-    networks:
-      - xmidt
-  talaria-1:
-    <<: *talaria
-    ports:
-      - 6210:6210
-      - 6211:6211
-      - 6212:6212
-      - 6213:6213
-      - 6214:6214
-    volumes:
-      - ./docFiles/talaria-1.yaml:/etc/talaria/talaria.yaml
-  talaria-2:
-    <<: *talaria
-    ports:
-      - 6220:6220
-      - 6221:6221
-      - 6222:6222
-      - 6223:6223
-      - 6224:6224
-    volumes:
-      - ./docFiles/talaria-2.yaml:/etc/talaria/talaria.yaml
 
 # Mark rdkb-simulator Services
   simulator: &simulator
@@ -126,6 +140,7 @@ services:
       - talaria-1
       - talaria-2
       - petasos
+      - themis
     networks:
       - xmidt
 
