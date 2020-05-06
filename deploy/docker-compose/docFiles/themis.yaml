@@ -31,11 +31,18 @@
         value: "themis"
       trust:
         value: 1000
-      partner-id: 
-        value: "comcast"
       capabilities:
         value:
           - xmidt:issuer:test:.*:all
+      sub:
+        value: client:supplied
+    
+    partnerID:
+      claim: partner-id
+      header: X-Midt-Partner-ID
+      parameter: pid
+      default: themis-partner
+
     key:
       kid: local
       type: rsa

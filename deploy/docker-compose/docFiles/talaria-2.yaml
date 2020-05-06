@@ -31,6 +31,11 @@
       pingPeriod: "45s"
       idlePeriod: "135s"
       requestTimeout: "15s"
+
+    rehasher:
+      services:
+        - talaria
+
     outbound:
       method: "POST"
       eventEndpoints:
@@ -54,13 +59,27 @@
   eventMap:
     default: http://caduceus:6000/api/v3/notify
 
-  jwtValidators:
-    -
-      keys:
-        Factory:
-            uri: "http://themis:6500/keys/{keyId}"
-        purpose: 0
-        updateInterval: 604800000000000
+  jwtValidator:
+    keys:
+      Factory:
+          uri: "http://themis:6500/keys/{keyId}"
+      purpose: 0
+      updateInterval: 24h
+
+  deviceAccessCheck:
+    type: monitor
+    checks:
+      - 
+        name: PartnerID
+        deviceCredentialPath: partner-id
+        op: contains
+        wrpCredentialPath: PartnerIDs
+        inversed: true
+      - 
+        name: Trusted Device
+        deviceCredentialPath: trust
+        op: "gt" 
+        inputValue: 999
 
   service:
     defaultScheme: http
@@ -75,22 +94,20 @@
         -
           service: "talaria"
           tags:
-            - "dev"
-            - "docker"
+            - "stage=dev"
+            - "flavor=docker"
           passingOnly: true
         -
           service: "caduceus"
           tags:
-            - "dev"
-            - "docker"
+            - "stage=dev"
+            - "flavor=docker"
           passingOnly: true
       registrations:
         -
           id: "talaria-2"
           name: "talaria"
           tags:
-            - "dev"
-            - "docker"
             - "stage=dev"
             - "flavor=docker"
           address: "http://talaria-2"
