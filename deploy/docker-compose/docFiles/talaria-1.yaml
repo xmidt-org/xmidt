@@ -67,7 +67,7 @@
       updateInterval: 24h
   
   deviceAccessCheck:
-    type: enforce
+    type: monitor
     checks:
       - 
         name: PartnerID
