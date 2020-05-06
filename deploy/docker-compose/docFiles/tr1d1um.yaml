@@ -30,6 +30,7 @@
     file: "stdout"
     level: "INFO"
     json: false
+    reducedLoggingResponseCodes: [200, 504]
     
   webhooksEnabled: false
 
@@ -51,7 +52,7 @@
 
   authHeader: ["dXNlcjpwYXNz"]
   targetURL: http://scytale:6300
-  # WRPSource: "dns:tr1d1um.xmidt.comcast.net"
+  WRPSource: "dns:tr1d1um.example.net"
   supportedServices:
     - "config"
   clientTimeout: "135s"

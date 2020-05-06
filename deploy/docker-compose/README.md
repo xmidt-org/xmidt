@@ -144,7 +144,7 @@ Content-Length: 231
 Read a single parameter:
 
 ```
-curl -i -H "Authorization: Basic dXNlcjpwYXNz" "http://localhost:6100/api/v2/device/mac:112233445566/config?names=Device.DeviceInfo.X_CISCO_COM_BootloaderVersion"
+curl -i -H "Authorization: Basic dXNlcjpwYXNz" "http://localhost:6100/api/v2/device/mac:112233445566/config?names=Device.DeviceInfo.X_CISCO_COM_BootloaderVersion" -H "X-Xmidt-Partner-ID: comcast,nbc,sky"
 ```
 
 Results in:
