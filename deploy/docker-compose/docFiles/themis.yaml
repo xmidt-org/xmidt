@@ -41,7 +41,7 @@
       claim: partner-id
       header: X-Midt-Partner-ID
       parameter: pid
-      default: themis-partner
+      default: comcast
 
     key:
       kid: local
