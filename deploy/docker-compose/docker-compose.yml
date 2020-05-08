@@ -8,7 +8,7 @@ services:
       - 6002:6002
       - 6003:6003
     depends_on:
-      - goaws
+      - argus
     volumes:
       - ./docFiles/caduceus.yaml:/etc/caduceus/caduceus.yaml
     networks:
@@ -21,7 +21,7 @@ services:
       - 6101:6101
       - 6102:6102
     depends_on:
-      - goaws
+      - argus
       - scytale
     volumes:
       - ./docFiles/tr1d1um.yaml:/etc/tr1d1um/tr1d1um.yaml
@@ -73,7 +73,7 @@ services:
       - 6302:6302
       - 6303:6303
     depends_on:
-      - goaws
+      - argus
       - petasos
     volumes:
       - ./docFiles/scytale.yaml:/etc/scytale/scytale.yaml
@@ -108,15 +108,20 @@ services:
     networks:
       - xmidt
 
-  goaws:
-    image: goaws:local
-    container_name: goaws
+  argus:
+    image: xmidt/argus:${ARGUS_VERSION}
     ports:
-      - 4100:4100
+      - 6600:6600
+      - 6601:6601
+      - 6602:6602
+      - 6603:6603
+    volumes:
+      - ./docFiles/argus.yaml:/argus.yaml
     networks:
       - xmidt
-    volumes:
-      - ./docFiles/sns.yaml:/conf/goaws.yaml
+    depends_on:
+      - yb-setup
+    restart: always
 
   prometheus:
     image: prom/prometheus
@@ -131,6 +136,56 @@ services:
       - ./docFiles/prometheus.yml:/prometheus-data/prometheus.yml
     command:  --log.level=debug --config.file=/prometheus-data/prometheus.yml
 
+  yb-master:
+    image: yugabytedb/yugabyte:latest
+    container_name: yb-master-n1
+    command: [ "/home/yugabyte/bin/yb-master",
+              "--fs_data_dirs=/mnt/disk0,/mnt/disk1",
+              "--master_addresses=yb-master-n1:7100",
+              "--replication_factor=1"]
+    networks:
+      - xmidt
+    ports:
+    - "7111:7000"
+    environment:
+      SERVICE_7000_NAME: yb-master
+
+  yb-tserver:
+    image: yugabytedb/yugabyte:latest
+    container_name: yb-tserver-n1
+    volumes:
+      - ./docFiles/create_db.cql:/create_db.cql
+    command: [ "/home/yugabyte/bin/yb-tserver",
+              "--fs_data_dirs=/mnt/disk0,/mnt/disk1",
+              "--tserver_master_addrs=yb-master-n1:7100"]
+    networks:
+      - xmidt
+    ports:
+    - "9042:9042"
+    - "6379:6379"
+    - "5433:5433"
+    - "9000:9000"
+    environment:
+      SERVICE_5433_NAME: ysql
+      SERVICE_9042_NAME: ycql
+      SERVICE_6379_NAME: yedis
+      SERVICE_9000_NAME: yb-tserver
+    depends_on:
+      - yb-master
+
+  yb-setup:
+    image: yugabytedb/yugabyte:latest
+    container_name: yb-setup
+    volumes:
+      - ./docFiles/create_db.cql:/create_db.cql
+    command: [ "/home/yugabyte/bin/cqlsh",
+              "yb-tserver-n1",
+              "-f", "/create_db.cql"]
+    networks:
+      - xmidt
+    depends_on:
+      - yb-tserver
+    restart: on-failure
 
 # Mark rdkb-simulator Services
   simulator: &simulator

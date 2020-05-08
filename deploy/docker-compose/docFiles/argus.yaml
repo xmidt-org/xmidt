@@ -1,0 +1,81 @@
+prometheus:
+  defaultNamespace: xmidt
+  defaultSubsystem: argus
+  constLabels:
+    development: "true"
+
+log:
+  file: stdout
+  level: DEBUG
+
+health:
+  disableLogging: false
+  custom:
+    server: development
+
+servers:
+  primary:
+    address: :6600
+    disableHTTPKeepAlives: true
+    header:
+      X-Midt-Server:
+        - argus
+      X-Midt-Version:
+        - development
+  metrics:
+    address: :6601
+    disableHTTPKeepAlives: true
+    header:
+      X-Midt-Server:
+        - argus
+      X-Midt-Version:
+        - development
+
+  health:
+    address: :6602
+    disableHTTPKeepAlives: true
+    header:
+      X-Midt-Server:
+        - argus
+      X-Midt-Version:
+        - development
+
+db:
+  # hosts is and array of address and port used to connect to the cluster.
+  hosts:
+    - "localhost:9042"
+  # database is the name of the database being connected to.
+  database: "config"
+  # opTimeout is the timeout for database calls after argus is connected.
+  # If the opTimeout is set to 0, it defaults to 10s.
+  # (Optional) defaults to 10s
+  opTimeout: 100ms
+
+#  # username is the username to use when connecting to the database.
+#  # (Optional)
+#  username: "cassandra"
+#
+#  # password is the password to use when connecting to the database.
+#  # (Optional)
+#  password: "cassandra"
+#
+#  # SSLRootCert is the root cert to use when connecting to the database.
+#  # The SSLKey and SSLCert must also be provided in order to connect securely.
+#  # (Optional)
+#  #sslRootCert: "/etc/argus/ca.crt"
+#
+#  # SSLKey is the SSL key to use when connecting to the database.  The
+#  # SSLRootCert and SSLCert must also be provided in order to connect securely.
+#  # (Optional)
+#  #sslKey: "/etc/argus/node.0.0.0.0.key"
+#
+#  # SSLCert is the SSL cert to use when connecting to the database.  The SSLKey
+#  # and SSLRootCert must also be provided in order to connect securely.
+#  # (Optional)
+#  #sslCert: "/etc/argus/node.0.0.0.0.crt"
+#
+#  # If you want to verify the hostname and server cert (like a wildcard for cass cluster) then you should turn this on
+#  # This option is basically the inverse of InSecureSkipVerify
+#  # See InSecureSkipVerify in http://golang.org/pkg/crypto/tls/ for more info
+#  # (Optional) defaults to false
+#  #enableHostVerification: false

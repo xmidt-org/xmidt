@@ -46,21 +46,27 @@
     - 1000
     - 10000
 
-  aws:
-    accessKey: "supbro"
-    secretKey: "nahbro"
-    env: local-dev
-    sns:
-      awsEndpoint: http://goaws:4100
-      region: "us-east-1"
-      topicArn: arn:aws:sns:us-east-1:000000000000:xmidt-local-caduceus
-      urlPath: "/api/v2/aws/sns"
-  waitForDns: 0
+########################################
+#   Webhook Related Configuration
+########################################
+# cacheConfig configures the in memory storage of the webhooks. aka how long webhooks should live etc.
+  cacheConfig:
+    # ttl is how long a webhook registration will last.
+    # (Optional) defaults to 5m
+    ttl: 5m
+
+    # checkInterval is how long the internal crapper will check if the inMemory webhook should be removed.
+    # (Optional) defaults to 1m
+    checkInterval: 10s
+
+  # Yggdrasil Config for storing the webhook information
+  argusConfig:
+    bucket: "webhooks-caduceus"
+    address: "http://argus:6600"
+    pullInterval: "2s"
+    filters:
+      stage: "dev"
   authHeader: ["dXNlcjpwYXNz"]
-  start:
-    duration: 1
-    apiPath: http://caduceus:6000/hooks
-    authHeader: dXNlcjpwYXNz
 
   service:
     defaultScheme: http
