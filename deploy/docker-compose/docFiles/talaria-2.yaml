@@ -85,7 +85,7 @@
     defaultScheme: http
     consul:
       client:
-        address: "consul1:8500"
+        address: "consul0:8500"
         scheme: "http"
         waitTime: "30s"
       disableGenerateID: true
