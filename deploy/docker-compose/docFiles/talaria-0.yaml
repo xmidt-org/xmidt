@@ -24,6 +24,8 @@
 
   device:
     manager:
+      wrpSourceCheck:
+        type: enforce
       upgrader:
         handshakeTimeout: "10s"
       maxDevices: 2000
@@ -65,7 +67,7 @@
       updateInterval: 24h 
   
   deviceAccessCheck:
-    type: monitor
+    type: enforce
     checks:
       - 
         name: PartnerID

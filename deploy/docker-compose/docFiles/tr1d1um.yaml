@@ -32,7 +32,7 @@
     json: false
     reducedLoggingResponseCodes: [200, 504]
     
-  webhooksEnabled: false
+  webhooksEnabled: true
 
   start:
     duration: 1
