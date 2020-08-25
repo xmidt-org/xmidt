@@ -21,7 +21,7 @@ services:
       - 6101:6101
       - 6102:6102
     depends_on:
-      - goaws
+      - argus
       - scytale
     volumes:
       - ./docFiles/tr1d1um.yaml:/etc/tr1d1um/tr1d1um.yaml
@@ -146,7 +146,7 @@ services:
 
 # Mark Consul Definitions
   consul0:
-    image: consul:latest
+    image: consul:1.6
     container_name: consul0
     hostname: consul0
     ports:
@@ -160,7 +160,7 @@ services:
       - ./docFiles/consul-0.json:/consul.json
     command: "agent -server -bootstrap-expect 1 -ui -client 0.0.0.0 -config-file consul.json"
   consul1:
-    image: consul:latest
+    image: consul:1.6
     container_name: consul1
     hostname: consul1
     ports:
@@ -175,6 +175,27 @@ services:
     volumes:
       - ./docFiles/consul-1.json:/consul.json
     command: "agent -server -bootstrap-expect 1 -ui -client 0.0.0.0 -config-file consul.json"
+  
+  argus:
+    image: xmidt/argus:${ARGUS_VERSION}
+    ports:
+      - 6600:6600
+      - 6601:6601
+      - 6602:6602
+    depends_on:
+      - dynamodb
+    volumes:
+      - ./docFiles/argus.yaml:/etc/argus/argus.yaml
+    networks:
+      - xmidt
+
+  dynamodb:
+    image: amazon/dynamodb-local
+    hostname: dynamodb-local
+    ports:
+      - "8000:8000"
+    networks:
+      - xmidt
 
 networks:
   xmidt:

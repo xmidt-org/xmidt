@@ -26,29 +26,19 @@
       subsystem: "tr1d1um"
     readTimeout: "15s"
     idleTimeout: "15s"
+
   log:
     file: "stdout"
     level: "INFO"
     json: false
     reducedLoggingResponseCodes: [200, 504]
     
-  webhooksEnabled: true
-
-  start:
-    duration: 1
-    apiPath: tr1d1um:6100/hooks
-
-  waitForDns: 0
-
-  aws:
-    accessKey: "supbro"
-    secretKey: "nahbro"
-    env: local-dev
-    sns:
-      awsEndpoint: http://goaws:4100
-      region: "us-east-1"
-      topicArn: arn:aws:sns:us-east-1:000000000000:xmidt-local-caduceus
-      urlPath: "/api/v2/aws/sns"
+  webhookStore:
+    bucket: webhooks
+    address: http://argus:6600
+    pullInterval: 5s
+    auth:
+      Basic: Basic dXNlcjpwYXNz
 
   authHeader: ["dXNlcjpwYXNz"]
   targetURL: http://scytale:6300
