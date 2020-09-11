@@ -68,6 +68,10 @@ scrape_configs:
     static_configs:
       - targets: ['tr1d1um:6103']
 
+  - job_name: 'themis'
+    static_configs:
+      - targets: ['themis:6502']
+
   - job_name: 'consul'
     metrics_path: "/v1/agent/metrics"
     params:
