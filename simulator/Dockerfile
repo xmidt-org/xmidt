@@ -14,6 +14,7 @@ RUN cd /build && \
     cd /build && \
     git clone https://github.com/Comcast/parodus.git && \
     cd parodus && \
+    git checkout ad2d43b4f6e980a6cc1c1340fc82564104eb1dd8 && \
     mkdir build && \
     cd build && \
     cmake .. && make && \
