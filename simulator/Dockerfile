@@ -47,13 +47,12 @@ COPY --from=packager /build/parodus/build/_install/lib64/libcurl.so /usr/lib/
 COPY ./simulate /usr/bin/simulate
 RUN chmod uga+x /usr/bin/simulate && \
     apk add --no-cache openssl libuuid && \
-    ln -s /usr/lib/libcurl.so /usr/lib/libcurl.so.1 && \
-    ln -s /usr/lib/libmsgpackc.so /usr/lib/libmsgpackc.so.2 && \
-    ln -s /usr/lib/libtrower-base64.so /usr/lib/libtrower-base64.so.1.0.0 && \
-    ln -s /usr/lib/libnopoll.so /usr/lib/libnopoll.so.0 && \
-    ln -s /usr/lib/libcimplog.so /usr/lib/libcimplog.so.1.0.0 && \
-    ln -s /usr/lib/libnanomsg.so /usr/lib/libnanomsg.so.5 && \
-    ln -s /usr/lib/libnanomsg.so /usr/lib/libnanomsg.so.5.1.0 && \
-    ln -s /usr/lib/libcjson.so /usr/lib/libcjson.so.1
-
+    cp /usr/lib/libcurl.so /usr/lib/libcurl.so.1 && \
+    cp /usr/lib/libmsgpackc.so /usr/lib/libmsgpackc.so.2 && \
+    cp /usr/lib/libtrower-base64.so /usr/lib/libtrower-base64.so.1.0.0 && \
+    cp /usr/lib/libnopoll.so /usr/lib/libnopoll.so.0 && \
+    cp /usr/lib/libcimplog.so /usr/lib/libcimplog.so.1.0.0 && \
+    cp /usr/lib/libnanomsg.so /usr/lib/libnanomsg.so.5 && \
+    cp /usr/lib/libnanomsg.so /usr/lib/libnanomsg.so.5.1.0 && \
+    cp /usr/lib/libcjson.so /usr/lib/libcjson.so.1
 ENTRYPOINT [ "/usr/bin/simulate" ]
