@@ -35,24 +35,27 @@ COPY --from=packager /build/parodus2mockTr181/etc/mock_tr181.json /etc/mock_tr18
 COPY --from=packager /build/parodus2mockTr181/build/_install/lib/libwdmp-c.so /usr/lib/
 COPY --from=packager /build/parodus2mockTr181/build/_install/lib/liblibparodus.so /usr/lib/
 COPY --from=packager /build/parodus/build/src/parodus /usr/bin/
-COPY --from=packager /build/parodus/build/_install/lib/libcimplog.so /usr/lib/
-COPY --from=packager /build/parodus/build/_install/lib64/libcjson.so /usr/lib/
+COPY --from=packager /build/parodus/build/_install/lib/libcimplog.so.1.0.0 /usr/lib/
+COPY --from=packager /build/parodus/build/_install/lib64/libcjson.so.1.7.8 /usr/lib/
 COPY --from=packager /build/parodus/build/_install/lib/libcjwt.so /usr/lib/
-COPY --from=packager /build/parodus/build/_install/lib/libmsgpackc.so /usr/lib/
-COPY --from=packager /build/parodus/build/_install/lib/libnopoll.so /usr/lib/
-COPY --from=packager /build/parodus/build/_install/lib/libtrower-base64.so /usr/lib/
+COPY --from=packager /build/parodus/build/_install/lib/libmsgpackc.so.2.0.0 /usr/lib/
+COPY --from=packager /build/parodus/build/_install/lib/libnopoll.so.0.0.0 /usr/lib/
+COPY --from=packager /build/parodus/build/_install/lib/libtrower-base64.so.1.0.0 /usr/lib/
 COPY --from=packager /build/parodus/build/_install/lib/libwrp-c.so /usr/lib/
-COPY --from=packager /build/parodus/build/_install/lib64/libnanomsg.so /usr/lib/
+COPY --from=packager /build/parodus/build/_install/lib64/libnanomsg.so.5.1.0 /usr/lib/
 COPY --from=packager /build/parodus/build/_install/lib64/libcurl.so /usr/lib/
 COPY ./simulate /usr/bin/simulate
 RUN chmod uga+x /usr/bin/simulate && \
     apk add --no-cache openssl libuuid && \
-    cp /usr/lib/libcurl.so /usr/lib/libcurl.so.1 && \
-    cp /usr/lib/libmsgpackc.so /usr/lib/libmsgpackc.so.2 && \
-    cp /usr/lib/libtrower-base64.so /usr/lib/libtrower-base64.so.1.0.0 && \
-    cp /usr/lib/libnopoll.so /usr/lib/libnopoll.so.0 && \
-    cp /usr/lib/libcimplog.so /usr/lib/libcimplog.so.1.0.0 && \
-    cp /usr/lib/libnanomsg.so /usr/lib/libnanomsg.so.5 && \
-    cp /usr/lib/libnanomsg.so /usr/lib/libnanomsg.so.5.1.0 && \
-    cp /usr/lib/libcjson.so /usr/lib/libcjson.so.1
+    ln -s /usr/lib/libcurl.so /usr/lib/libcurl.so.1 && \
+    ln -s /usr/lib/libmsgpackc.so.2.0.0 /usr/lib/libmsgpackc.so && \
+    ln -s /usr/lib/libmsgpackc.so.2.0.0 /usr/lib/libmsgpackc.so.2 && \
+    ln -s /usr/lib/libtrower-base64.so.1.0.0 /usr/lib/libtrower-base64.so && \
+    ln -s /usr/lib/libnopoll.so.0.0.0 /usr/lib/libnopoll.so && \
+    ln -s /usr/lib/libnopoll.so.0.0.0 /usr/lib/libnopoll.so.0 && \
+    ln -s /usr/lib/libcimplog.so.1.0.0 /usr/lib/libcimplog.so && \
+    ln -s /usr/lib/libnanomsg.so.5.1.0 /usr/lib/libnanomsg.so.5 && \
+    ln -s /usr/lib/libnanomsg.so.5 /usr/lib/libnanomsg.so && \
+    ln -s /usr/lib/libcjson.so.1.7.8 /usr/lib/libcjson.so.1 && \
+    ln -s /usr/lib/libcjson.so.1 /usr/lib/libcjson.so
 ENTRYPOINT [ "/usr/bin/simulate" ]
