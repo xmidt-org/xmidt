@@ -12,7 +12,7 @@ if [[ -z "${FIRMWARE}" ]]; then
 fi
 
 if [[ -z "${BOOT_TIME}" ]]; then
-    BOOT_TIME=`date +%s`
+    BOOT_TIME=$(date +%s)
 fi
 
 if [[ -z "${HW_MANUFACTURER}" ]]; then
@@ -35,40 +35,62 @@ if [[ -z "${CMAC}" ]]; then
     CMAC="112233445566"
 fi
 
+if [[ -z "${TOKEN_SERVER_URL}" ]]; then
+    TOKEN_SERVER_URL="http://themis:6501/issue"
+fi
+
+if [[ -z "${SSL_CERT_PATH}" ]]; then
+    SSL_CERT_PATH="/etc/ssl/certs/ca-certificates.crt"
+fi
+
 #In this docker-compose cluster, themis has mtls disabled so
 #feel free to ignore the --client-cert-path flag value
 #it is required by parodus to fetch a token
+if [[ -z "${CLIENT_CERT_PATH}" ]]; then
+    CLIENT_CERT_PATH="/etc/ssl/certs/ca-certificates.crt"
+fi
+
+# MTLS_CLIENT_* is used to authenticate with talaria.
+if [[ -z "${MTLS_CLIENT_CERT_PATH}" ]]; then
+    MTLS_CLIENT_CERT_PATH=""
+fi
+
+if [[ -z "${MTLS_CLIENT_KEY_PATH}" ]]; then
+    MTLS_CLIENT_KEY_PATH=""
+fi
 
 parodus --hw-model=aker-testing \
-        --ssl-cert-path=/etc/ssl/certs/ca-certificates.crt \
-        --client-cert-path=/etc/ssl/certs/ca-certificates.crt \
-        --hw-serial-number=$SERIAL_NUMBER \
-        --hw-manufacturer=$HW_MANUFACTURER \
-        --hw-mac=$CMAC \
-        --hw-last-reboot-reason=$REBOOT_REASON \
-        --fw-name=$FIRMWARE \
-        --boot-time=$BOOT_TIME \
-        --partner-id=$PARTNER_ID \
-        --parodus-local-url=tcp://127.0.0.1:$parodus_port \
-        --webpa-ping-timeout=60 \
-        --token-server-url=http://themis:6501/issue \
-        --webpa-backoff-max=2 \
-        --webpa-interface-used=eth0 \
-        --webpa-url=$URL \
-        --force-ipv4  &
+    --ssl-cert-path=$SSL_CERT_PATH \
+    --client-cert-path=$CLIENT_CERT_PATH \
+    --mtls-client-cert-path=$MTLS_CLIENT_CERT_PATH \
+    --mtls-client-key-path=$MTLS_CLIENT_KEY_PATH \
+    --hw-serial-number=$SERIAL_NUMBER \
+    --hw-manufacturer=$HW_MANUFACTURER \
+    --hw-mac=$CMAC \
+    --hw-last-reboot-reason=$REBOOT_REASON \
+    --fw-name=$FIRMWARE \
+    --boot-time=$BOOT_TIME \
+    --partner-id=$PARTNER_ID \
+    --parodus-local-url=tcp://127.0.0.1:$parodus_port \
+    --webpa-ping-timeout=60 \
+    --token-server-url=$TOKEN_SERVER_URL \
+    --webpa-backoff-max=2 \
+    --webpa-interface-used=eth0 \
+    --webpa-url=$URL \
+    --force-ipv4 &
 P1=$!
 
 aker -p tcp://127.0.0.1:$parodus_port \
-     -c tcp://127.0.0.1:$aker_port \
-     -w echo \
-     -d /tmp/aker-data.msgpack \
-     -f /tmp/aker-data.msgpack.md5 \
-     -m 128 > /dev/null &
+    -c tcp://127.0.0.1:$aker_port \
+    -w echo \
+    -d /tmp/aker-data.msgpack \
+    -f /tmp/aker-data.msgpack.md5 \
+    -m 128 >/dev/null &
 P2=$!
 
 mock_tr181 -p $parodus_port \
-           -c $mocktr181_port \
-           -d /etc/mock_tr181.json > /dev/null &
+    -c $mocktr181_port \
+    -d /etc/mock_tr181.json >/dev/null &
 P3=$!
 
 wait $P1 $P2 $P3
