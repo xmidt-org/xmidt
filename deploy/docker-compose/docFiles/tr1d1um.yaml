@@ -33,12 +33,14 @@
     json: false
     reducedLoggingResponseCodes: [200, 504]
     
-  webhookStore:
-    bucket: webhooks
-    address: http://argus:6600
-    pullInterval: 5s
-    auth:
-      Basic: Basic dXNlcjpwYXNz
+  webhook:
+    argus:
+      bucket: webhooks
+      address: http://argus:6600
+      pullInterval: 5s
+      adminToken: Hzu1WpIe7S8G
+      auth:
+        Basic: Basic dXNlcjpwYXNz
 
   authHeader: ["dXNlcjpwYXNz"]
   targetURL: http://scytale:6300

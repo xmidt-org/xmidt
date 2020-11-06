@@ -46,21 +46,16 @@
     - 1000
     - 10000
 
-  aws:
-    accessKey: "supbro"
-    secretKey: "nahbro"
-    env: local-dev
-    sns:
-      awsEndpoint: http://goaws:4100
-      region: "us-east-1"
-      topicArn: arn:aws:sns:us-east-1:000000000000:xmidt-local-caduceus
-      urlPath: "/api/v2/aws/sns"
-  waitForDns: 0
   authHeader: ["dXNlcjpwYXNz"]
-  start:
-    duration: 1
-    apiPath: http://caduceus:6000/hooks
-    authHeader: dXNlcjpwYXNz
+
+  webhook:
+    argus:
+      bucket: webhooks
+      address: http://argus:6600
+      pullInterval: 5s
+      adminToken: Hzu1WpIe7S8G
+      auth:
+        Basic: Basic dXNlcjpwYXNz
 
   service:
     defaultScheme: http
