@@ -8,7 +8,7 @@ services:
       - 6002:6002
       - 6003:6003
     depends_on:
-      - goaws
+      - argus
     volumes:
       - ./docFiles/caduceus.yaml:/etc/caduceus/caduceus.yaml
     networks:
@@ -73,7 +73,6 @@ services:
       - 6302:6302
       - 6303:6303
     depends_on:
-      - goaws
       - petasos
     volumes:
       - ./docFiles/scytale.yaml:/etc/scytale/scytale.yaml
@@ -107,16 +106,6 @@ services:
       - ./docFiles/themis.yaml:/themis.yaml
     networks:
       - xmidt
-
-  goaws:
-    image: goaws:local
-    container_name: goaws
-    ports:
-      - 4100:4100
-    networks:
-      - xmidt
-    volumes:
-      - ./docFiles/sns.yaml:/conf/goaws.yaml
 
   prometheus:
     image: prom/prometheus
