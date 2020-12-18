@@ -68,6 +68,13 @@ scrape_configs:
     static_configs:
       - targets: ['tr1d1um:6103']
 
+  - job_name: 'argus'
+         # metrics_path defaults to '/metrics'
+         # scheme defaults to 'http'.
+
+    static_configs:
+      - targets: ['argus:6601']
+  
   - job_name: 'themis'
     static_configs:
       - targets: ['themis:6502']

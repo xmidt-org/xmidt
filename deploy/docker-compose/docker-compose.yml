@@ -8,7 +8,7 @@ services:
       - 6002:6002
       - 6003:6003
     depends_on:
-      - goaws
+      - argus
     volumes:
       - ./docFiles/caduceus.yaml:/etc/caduceus/caduceus.yaml
     networks:
@@ -21,7 +21,7 @@ services:
       - 6101:6101
       - 6102:6102
     depends_on:
-      - goaws
+      - argus
       - scytale
     volumes:
       - ./docFiles/tr1d1um.yaml:/etc/tr1d1um/tr1d1um.yaml
@@ -73,7 +73,6 @@ services:
       - 6302:6302
       - 6303:6303
     depends_on:
-      - goaws
       - petasos
     volumes:
       - ./docFiles/scytale.yaml:/etc/scytale/scytale.yaml
@@ -107,16 +106,6 @@ services:
       - ./docFiles/themis.yaml:/themis.yaml
     networks:
       - xmidt
-
-  goaws:
-    image: goaws:local
-    container_name: goaws
-    ports:
-      - 4100:4100
-    networks:
-      - xmidt
-    volumes:
-      - ./docFiles/sns.yaml:/conf/goaws.yaml
 
   prometheus:
     image: prom/prometheus
@@ -175,6 +164,27 @@ services:
     volumes:
       - ./docFiles/consul-1.json:/consul.json
     command: "agent -server -bootstrap-expect 1 -ui -client 0.0.0.0 -config-file consul.json"
+  
+  argus:
+    image: xmidt/argus:${ARGUS_VERSION}
+    ports:
+      - 6600:6600
+      - 6601:6601
+      - 6602:6602
+    depends_on:
+      - dynamodb
+    volumes:
+      - ./docFiles/argus.yaml:/etc/argus/argus.yaml
+    networks:
+      - xmidt
+
+  dynamodb:
+    image: amazon/dynamodb-local
+    hostname: dynamodb-local
+    ports:
+      - "8000:8000"
+    networks:
+      - xmidt
 
 networks:
   xmidt:
