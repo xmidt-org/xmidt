@@ -108,9 +108,9 @@ dynamo:
 # and request validation.
 request:
   authorization:
-    # adminToken serves as a master key which allows performing operations on any 
-    # item regardless of their ownership status.  
-    adminToken: "Hzu1WpIe7S8G" 
+    # adminToken serves as a master key which allows performing operations on any
+    # item regardless of their ownership status.
+    adminToken: "Hzu1WpIe7S8G"
 
   validation:
     # maxTTL specifies the cap for the TTL of items when values are specified.
@@ -127,10 +127,10 @@ authHeader: ["dXNlcjpwYXNz"]
 # jwtValidator provides Bearer auth configuration
 jwtValidator:
   keys:
-    factory:
-      uri: "http://sample-jwt-validator-uri/{keyId}"
+    Factory:
+        uri: "http://themis:6500/keys/local"
     purpose: 0
-    updateInterval: 604800000000000
+    updateInterval: 24h
 
 # capabilityCheck provides the details needed for checking an incoming JWT's
 # capabilities.  If the type of check isn't provided, no checking is done.  The

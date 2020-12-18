@@ -62,7 +62,7 @@
   jwtValidator:
     keys:
       Factory:
-          uri: "http://themis:6500/keys/{keyId}"
+          uri: "http://themis:6500/keys/local"
       purpose: 0
       updateInterval: 24h 
   

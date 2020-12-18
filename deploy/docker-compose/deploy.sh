@@ -3,8 +3,8 @@
 DIR=$( cd $(dirname $0) ; pwd -P )
 ROOT_DIR=$DIR/../../
 
-pushd $ROOT_DIR
-echo "Building Simulator..."
+pushd "$ROOT_DIR" || exit
+#echo "Building Simulator..."
 docker build -t simulator:local $ROOT_DIR/simulator
 popd
 
@@ -16,9 +16,9 @@ docker build -t goaws:local .
 popd
 
 echo "Running services..."
-CADUCEUS_VERSION=${CADUCEUS_VERSION:-0.2.7} \
-ARGUS_VERSION=local \
-TR1D1UM_VERSION=${TR1D1UM_VERSION:-0.5.0} \
+CADUCEUS_VERSION=${CADUCEUS_VERSION:-0.4.2} \
+ARGUS_VERSION=${ARGUS_VERSION:-0.3.9} \
+TR1D1UM_VERSION=${TR1D1UM_VERSION:-0.5.3} \
 SCYTALE_VERSION=${SCYTALE_VERSION:-0.1.5} \
 PETASOS_VERSION=${PETASOS_VERSION:-0.1.4} \
 TALARIA_VERSION=${TALARIA_VERSION:-0.5.9} \
