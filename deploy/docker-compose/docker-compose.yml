@@ -146,7 +146,7 @@ services:
 
 # Mark Consul Definitions
   consul0:
-    image: consul:1.6
+    image: consul:latest
     container_name: consul0
     hostname: consul0
     ports:
@@ -160,7 +160,7 @@ services:
       - ./docFiles/consul-0.json:/consul.json
     command: "agent -server -bootstrap-expect 1 -ui -client 0.0.0.0 -config-file consul.json"
   consul1:
-    image: consul:1.6
+    image: consul:latest
     container_name: consul1
     hostname: consul1
     ports:
