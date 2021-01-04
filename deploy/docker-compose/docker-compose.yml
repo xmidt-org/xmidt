@@ -17,7 +17,6 @@ services:
     environment:
       - CONSUL_HOST=consul0:8500
       - ARGUS_HOST=http://argus:6600
-      - LOG_LEVEL=DEBUG
     ports:
       - "6100-6103:6100-6103"
     depends_on:
@@ -95,7 +94,6 @@ services:
 
   dynamodb:
     image: amazon/dynamodb-local
-    hostname: dynamodb
     hostname: dynamodb
     ports:
       - "8000:8000"
