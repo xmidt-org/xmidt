@@ -59,7 +59,7 @@ scrape_configs:
          # scheme defaults to 'http'.
 
     static_configs:
-      - targets: ['talaria-0:6204', 'talaria-1:6214', 'talaria-2:6224']
+      - targets: ['talaria-0:6204', 'talaria-1:6204', 'talaria-2:6204']
 
   - job_name: 'tr1d1um'
          # metrics_path defaults to '/metrics'
@@ -74,10 +74,10 @@ scrape_configs:
 
     static_configs:
       - targets: ['argus:6601']
-  
+
   - job_name: 'themis'
     static_configs:
-      - targets: ['themis:6502']
+      - targets: ['themis:6503']
 
   - job_name: 'consul'
     metrics_path: "/v1/agent/metrics"
