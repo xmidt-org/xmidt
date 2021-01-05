@@ -1,109 +1,102 @@
-version: '3.4'
+version: '3.8'
 services:
   caduceus:
     image: xmidt/caduceus:${CADUCEUS_VERSION}
     ports:
-      - 6000:6000
-      - 6001:6001
-      - 6002:6002
-      - 6003:6003
+      - "6000-6003:6000-6003"
+    environment:
+      - CONSUL_HOST=consul0:8500
+      - ARGUS_HOST=http://argus:6600
     depends_on:
       - argus
-    volumes:
-      - ./docFiles/caduceus.yaml:/etc/caduceus/caduceus.yaml
     networks:
       - xmidt
 
   tr1d1um:
     image: xmidt/tr1d1um:${TR1D1UM_VERSION}
+    environment:
+      - CONSUL_HOST=consul0:8500
+      - ARGUS_HOST=http://argus:6600
     ports:
-      - 6100:6100
-      - 6101:6101
-      - 6102:6102
+      - "6100-6103:6100-6103"
     depends_on:
       - argus
       - scytale
-    volumes:
-      - ./docFiles/tr1d1um.yaml:/etc/tr1d1um/tr1d1um.yaml
     networks:
       - xmidt
 
 # Mark Talaria Services
   talaria-0: &talaria
     image: xmidt/talaria:${TALARIA_VERSION}
+    environment:
+      - CONSUL_HOST=consul0:8500
     ports:
-      - 6200:6200
-      - 6201:6201
-      - 6202:6202
-      - 6203:6203
-      - 6204:6204
+      - "6200-6204:6200-6204"
     depends_on:
       - consul0
       - themis
-    volumes:
-      - ./docFiles/talaria-0.yaml:/etc/talaria/talaria.yaml
     networks:
       - xmidt
   talaria-1:
     <<: *talaria
+    environment:
+      - CONSUL_HOST=consul0:8500
     ports:
-      - 6210:6210
-      - 6211:6211
-      - 6212:6212
-      - 6213:6213
-      - 6214:6214
-    volumes:
-      - ./docFiles/talaria-1.yaml:/etc/talaria/talaria.yaml
+      - "6210-6214:6200-6204"
   talaria-2:
     <<: *talaria
+    environment:
+      - CONSUL_HOST=consul1:8500
     ports:
-      - 6220:6220
-      - 6221:6221
-      - 6222:6222
-      - 6223:6223
-      - 6224:6224
-    volumes:
-      - ./docFiles/talaria-2.yaml:/etc/talaria/talaria.yaml
-
+      - "6220-6224:6200-6204"
   scytale:
     image: xmidt/scytale:${SCYTALE_VERSION}
+    environment:
+      - CONSUL_HOST=consul0:8500
     ports:
-      - 6300:6300
-      - 6301:6301
-      - 6302:6302
-      - 6303:6303
+      - "6300-6303:6300-6303"
     depends_on:
       - petasos
-    volumes:
-      - ./docFiles/scytale.yaml:/etc/scytale/scytale.yaml
     networks:
       - xmidt
 
 # Mark petasos Services
   petasos: &petasos
     image: xmidt/petasos:${PETASOS_VERSION}
+    environment:
+      - CONSUL_HOST=consul0:8500
     ports:
-      - 6400:6400
-      - 6401:6401
-      - 6402:6402
-      - 6403:6403
-      - 6404:6404
+    - "6400-6403:6400-6403"
     depends_on:
       - consul0
-    volumes:
-      - ./docFiles/petasos.yaml:/etc/petasos/petasos.yaml
     networks:
       - xmidt
 
   themis:
     image: xmidt/themis:${THEMIS_VERSION}
+    environment:
+      - CONSUL_HOST=consul0:8500
     ports:
-      - 6500:6500
-      - 6501:6501
-      - 6502:6502
-      - 6503:6503
-    volumes:
-      - ./docFiles/themis.yaml:/themis.yaml
+      - "6500-6504:6500-6504"
+    networks:
+      - xmidt
+
+  argus:
+    image: xmidt/argus:${ARGUS_VERSION}
+    environment:
+      - "AWS_ENDPOINT=http://dynamodb:8000"
+    ports:
+      - "6600-6603:6600-6603"
+    depends_on:
+      - dynamodb
+    networks:
+      - xmidt
+
+  dynamodb:
+    image: amazon/dynamodb-local
+    hostname: dynamodb
+    ports:
+      - "8000:8000"
     networks:
       - xmidt
 
@@ -123,7 +116,7 @@ services:
 
 # Mark rdkb-simulator Services
   simulator: &simulator
-    image: simulator:${SIMULATOR_VERSION}
+    image: xmidt/simulator:${SIMULATOR_VERSION}
     depends_on:
       - talaria-0
       - talaria-1
@@ -164,19 +157,6 @@ services:
     volumes:
       - ./docFiles/consul-1.json:/consul.json
     command: "agent -server -bootstrap-expect 1 -ui -client 0.0.0.0 -config-file consul.json"
-  
-  argus:
-    image: xmidt/argus:${ARGUS_VERSION}
-    ports:
-      - 6600:6600
-      - 6601:6601
-      - 6602:6602
-    depends_on:
-      - dynamodb
-    volumes:
-      - ./docFiles/argus.yaml:/etc/argus/argus.yaml
-    networks:
-      - xmidt
 
   dynamodb:
     image: amazon/dynamodb-local
