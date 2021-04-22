@@ -17,6 +17,8 @@ services:
     environment:
       - CONSUL_HOST=consul0:8500
       - ARGUS_HOST=http://argus:6600
+      - TRACING_PROVIDER_NAME=zipkin
+      - TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans
     ports:
       - "6100-6103:6100-6103"
     depends_on:
@@ -163,6 +165,13 @@ services:
     hostname: dynamodb-local
     ports:
       - "8000:8000"
+    networks:
+      - xmidt
+
+  zipkin:
+    image: openzipkin/zipkin 
+    ports:
+      - "9411:9411"
     networks:
       - xmidt
 
