@@ -32,6 +32,8 @@ services:
     image: xmidt/talaria:${TALARIA_VERSION}
     environment:
       - CONSUL_HOST=consul0:8500
+      - TRACING_PROVIDER_NAME=zipkin
+      - TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans
     ports:
       - "6200-6204:6200-6204"
     depends_on:
@@ -43,18 +45,24 @@ services:
     <<: *talaria
     environment:
       - CONSUL_HOST=consul0:8500
+      - TRACING_PROVIDER_NAME=zipkin
+      - TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans
     ports:
       - "6210-6214:6200-6204"
   talaria-2:
     <<: *talaria
     environment:
       - CONSUL_HOST=consul1:8500
+      - TRACING_PROVIDER_NAME=zipkin
+      - TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans
     ports:
       - "6220-6224:6200-6204"
   scytale:
     image: xmidt/scytale:${SCYTALE_VERSION}
     environment:
       - CONSUL_HOST=consul0:8500
+      - TRACING_PROVIDER_NAME=zipkin
+      - TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans
     ports:
       - "6300-6303:6300-6303"
     depends_on:
@@ -78,6 +86,8 @@ services:
     image: xmidt/themis:${THEMIS_VERSION}
     environment:
       - CONSUL_HOST=consul0:8500
+      - TRACING_PROVIDER_NAME=zipkin
+      - TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans
     ports:
       - "6500-6504:6500-6504"
     networks:
@@ -87,6 +97,8 @@ services:
     image: xmidt/argus:${ARGUS_VERSION}
     environment:
       - "AWS_ENDPOINT=http://dynamodb:8000"
+      - TRACING_PROVIDER_NAME=zipkin
+      - TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans
     ports:
       - "6600-6603:6600-6603"
     depends_on:
