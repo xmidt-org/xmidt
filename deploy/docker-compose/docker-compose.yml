@@ -99,6 +99,7 @@ services:
       - "AWS_ENDPOINT=http://dynamodb:8000"
       - TRACING_PROVIDER_NAME=zipkin
       - TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans
+      - ACCESS_LEVEL_CAPABILITY=x1:issuer:test:.*:all
     ports:
       - "6600-6603:6600-6603"
     depends_on:
