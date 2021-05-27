@@ -21,6 +21,7 @@ RUN cd /build && \
     cd /build && \
     git clone https://github.com/Comcast/aker.git && \
     cd aker && \
+    git checkout cfb54022fa6e0ba70040e419d34655da955637b5 && \
     mkdir build && \
     cd build && \
     cmake .. && make

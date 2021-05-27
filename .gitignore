@@ -1,5 +1,7 @@
 diagrams/*.png
 
+.idea
+
 rendered.*
 ./deploy/kubernetes/helm/xmidt-cloud-ship/
 ./deploy/kubernetes/helm/charts/
