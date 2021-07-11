@@ -2,6 +2,7 @@ version: '3.8'
 services:
   caduceus:
     image: xmidt/caduceus:${CADUCEUS_VERSION}
+    container_name: caduceus
     ports:
       - "6000-6003:6000-6003"
     environment:
@@ -19,6 +20,7 @@ services:
       - ARGUS_HOST=http://argus:6600
       - TRACING_PROVIDER_NAME=zipkin
       - TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans
+    container_name: tr1d1um
     ports:
       - "6100-6103:6100-6103"
     depends_on:
@@ -34,6 +36,7 @@ services:
       - CONSUL_HOST=consul0:8500
       - TRACING_PROVIDER_NAME=zipkin
       - TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans
+    container_name: talaria0
     ports:
       - "6200-6204:6200-6204"
     depends_on:
@@ -47,6 +50,7 @@ services:
       - CONSUL_HOST=consul0:8500
       - TRACING_PROVIDER_NAME=zipkin
       - TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans
+    container_name: talaria1
     ports:
       - "6210-6214:6200-6204"
   talaria-2:
@@ -55,6 +59,7 @@ services:
       - CONSUL_HOST=consul1:8500
       - TRACING_PROVIDER_NAME=zipkin
       - TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans
+    container_name: talaria2
     ports:
       - "6220-6224:6200-6204"
   scytale:
@@ -63,6 +68,7 @@ services:
       - CONSUL_HOST=consul0:8500
       - TRACING_PROVIDER_NAME=zipkin
       - TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans
+    container_name: scytale
     ports:
       - "6300-6303:6300-6303"
     depends_on:
@@ -75,6 +81,7 @@ services:
     image: xmidt/petasos:${PETASOS_VERSION}
     environment:
       - CONSUL_HOST=consul0:8500
+    container_name: petasos
     ports:
     - "6400-6403:6400-6403"
     depends_on:
@@ -88,6 +95,7 @@ services:
       - CONSUL_HOST=consul0:8500
       - TRACING_PROVIDER_NAME=zipkin
       - TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans
+    container_name: themis
     ports:
       - "6500-6504:6500-6504"
     networks:
@@ -100,6 +108,7 @@ services:
       - TRACING_PROVIDER_NAME=zipkin
       - TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans
       - ACCESS_LEVEL_CAPABILITY=x1:issuer:test:.*:all
+    container_name: argus
     ports:
       - "6600-6603:6600-6603"
     depends_on:
@@ -110,6 +119,7 @@ services:
   dynamodb:
     image: amazon/dynamodb-local
     hostname: dynamodb
+    container_name: dynamo-xmidt
     ports:
       - "8000:8000"
     networks:
@@ -117,6 +127,7 @@ services:
 
   prometheus:
     image: prom/prometheus
+    container_name: prometheus-xmidt
     networks:
       - xmidt
     ports:
@@ -132,6 +143,7 @@ services:
 # Mark rdkb-simulator Services
   simulator: &simulator
     image: xmidt/simulator:${SIMULATOR_VERSION}
+    container_name: simulator
     depends_on:
       - talaria-0
       - talaria-1
