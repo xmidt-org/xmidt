@@ -62,10 +62,12 @@ services:
     container_name: talaria2
     ports:
       - "6220-6224:6200-6204"
+
   scytale:
     image: xmidt/scytale:${SCYTALE_VERSION}
     environment:
       - CONSUL_HOST=consul0:8500
+      - ARGUS_HOST=http://argus:6600
       - TRACING_PROVIDER_NAME=zipkin
       - TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans
     container_name: scytale
@@ -73,6 +75,7 @@ services:
       - "6300-6303:6300-6303"
     depends_on:
       - petasos
+      - argus
     networks:
       - xmidt
 
@@ -106,8 +109,8 @@ services:
     environment:
       - "AWS_ENDPOINT=http://dynamodb:8000"
       - TRACING_PROVIDER_NAME=zipkin
-      - TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans
-      - ACCESS_LEVEL_CAPABILITY=x1:issuer:test:.*:all
+      - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
+      - "ACCESS_LEVEL_CAPABILITY=x1:issuer:test:.*:all"
     container_name: argus
     ports:
       - "6600-6603:6600-6603"
