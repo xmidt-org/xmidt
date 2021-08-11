@@ -1,8 +1,8 @@
 # Deploying XMiDT
 
-## Docker
+## Docker/awscli
 
-In order to deploy into Docker, make sure [Docker is installed](https://docs.docker.com/install/).
+In order to deploy into Docker, make sure [Docker is installed](https://docs.docker.com/install/). Additionally for goaws, make sure that awscli is intalled.
 
 #### Deploy
 _**Note**_: While Tr1d1um is not part of XMiDT(it is WebPA), it is recommended to be
