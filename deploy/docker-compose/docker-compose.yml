@@ -1,207 +1,193 @@
-version: '3.8'
-services:
-  caduceus:
-    image: xmidt/caduceus:${CADUCEUS_VERSION}
-    container_name: caduceus
-    ports:
-      - "6000-6003:6000-6003"
-    environment:
-      - CONSUL_HOST=consul0:8500
-      - ARGUS_HOST=http://argus:6600
-    depends_on:
-      - argus
-    networks:
-      - xmidt
-
-  tr1d1um:
-    image: xmidt/tr1d1um:${TR1D1UM_VERSION}
-    environment:
-      - CONSUL_HOST=consul0:8500
-      - ARGUS_HOST=http://argus:6600
-      - TRACING_PROVIDER_NAME=zipkin
-      - TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans
-    container_name: tr1d1um
-    ports:
-      - "6100-6103:6100-6103"
-    depends_on:
-      - argus
-      - scytale
-    networks:
-      - xmidt
-
-# Mark Talaria Services
-  talaria-0: &talaria
-    image: xmidt/talaria:${TALARIA_VERSION}
-    environment:
-      - CONSUL_HOST=consul0:8500
-      - TRACING_PROVIDER_NAME=zipkin
-      - TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans
-    container_name: talaria0
-    ports:
-      - "6200-6204:6200-6204"
-    depends_on:
-      - consul0
-      - themis
-    networks:
-      - xmidt
-  talaria-1:
-    <<: *talaria
-    environment:
-      - CONSUL_HOST=consul0:8500
-      - TRACING_PROVIDER_NAME=zipkin
-      - TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans
-    container_name: talaria1
-    ports:
-      - "6210-6214:6200-6204"
-  talaria-2:
-    <<: *talaria
-    environment:
-      - CONSUL_HOST=consul1:8500
-      - TRACING_PROVIDER_NAME=zipkin
-      - TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans
-    container_name: talaria2
-    ports:
-      - "6220-6224:6200-6204"
-
-  scytale:
-    image: xmidt/scytale:${SCYTALE_VERSION}
-    environment:
-      - CONSUL_HOST=consul0:8500
-      - ARGUS_HOST=http://argus:6600
-      - TRACING_PROVIDER_NAME=zipkin
-      - TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans
-    container_name: scytale
-    ports:
-      - "6300-6303:6300-6303"
-    depends_on:
-      - petasos
-      - argus
-    networks:
-      - xmidt
-
-# Mark petasos Services
-  petasos: &petasos
-    image: xmidt/petasos:${PETASOS_VERSION}
-    environment:
-      - CONSUL_HOST=consul0:8500
-    container_name: petasos
-    ports:
-    - "6400-6403:6400-6403"
-    depends_on:
-      - consul0
-    networks:
-      - xmidt
-
-  themis:
-    image: xmidt/themis:${THEMIS_VERSION}
-    environment:
-      - CONSUL_HOST=consul0:8500
-      - TRACING_PROVIDER_NAME=zipkin
-      - TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans
-    container_name: themis
-    ports:
-      - "6500-6504:6500-6504"
-    networks:
-      - xmidt
-
-  argus:
-    image: xmidt/argus:${ARGUS_VERSION}
-    environment:
+--- 
+networks: 
+  xmidt: ~
+services: 
+  argus: 
+    container_name: argus
+    depends_on: 
+      - dynamodb
+    environment: 
       - "AWS_ENDPOINT=http://dynamodb:8000"
-      - TRACING_PROVIDER_NAME=zipkin
+      - "TRACING_PROVIDER_NAME=zipkin"
       - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
       - "ACCESS_LEVEL_CAPABILITY=x1:issuer:test:.*:all"
-    container_name: argus
-    ports:
+    image: "xmidt/argus:${ARGUS_VERSION}"
+    networks: 
+      - xmidt
+    ports: 
       - "6600-6603:6600-6603"
-    depends_on:
-      - dynamodb
-    networks:
+  caduceus: 
+    container_name: caduceus
+    depends_on: 
+      - argus
+    environment: 
+      - "CONSUL_HOST=consul0:8500"
+      - "ARGUS_HOST=http://argus:6600"
+    image: "xmidt/caduceus:${CADUCEUS_VERSION}"
+    networks: 
       - xmidt
-
-  dynamodb:
-    image: amazon/dynamodb-local
-    hostname: dynamodb
+    ports: 
+      - "6000-6003:6000-6003"
+  consul0: 
+    command: "agent -server -bootstrap-expect 1 -ui -client 0.0.0.0 -config-file consul.json"
+    container_name: consul0
+    hostname: consul0
+    image: "consul:latest"
+    networks: 
+      - xmidt
+    ports: 
+      - "8400:8400"
+      - "8500:8500"
+      - "8600:8600"
+      - "8600:8600/udp"
+    volumes: 
+      - "./docFiles/consul-0.json:/consul.json"
+  consul1: 
+    command: "agent -server -bootstrap-expect 1 -ui -client 0.0.0.0 -config-file consul.json"
+    container_name: consul1
+    depends_on: 
+      - consul0
+    hostname: consul1
+    image: "consul:latest"
+    networks: 
+      - xmidt
+    ports: 
+      - "8401:8400"
+      - "8501:8500"
+      - "8601:8600"
+      - "8601:8600/udp"
+    volumes: 
+      - "./docFiles/consul-1.json:/consul.json"
+  dynamodb: 
     container_name: dynamo-xmidt
-    ports:
+    hostname: dynamodb
+    image: amazon/dynamodb-local
+    networks: 
+      - xmidt
+    ports: 
       - "8000:8000"
-    networks:
+  petasos: 
+    container_name: petasos
+    depends_on: 
+      - consul0
+    environment: 
+      - "CONSUL_HOST=consul0:8500"
+    image: "xmidt/petasos:${PETASOS_VERSION}"
+    networks: 
       - xmidt
-
-  prometheus:
-    image: prom/prometheus
+    ports: 
+      - "6400-6403:6400-6403"
+  prometheus: 
+    command: "--log.level=debug --config.file=/prometheus-data/prometheus.yml"
     container_name: prometheus-xmidt
-    networks:
-      - xmidt
-    ports:
-      - 9090:9090
-    depends_on:
+    depends_on: 
       - consul0
       - consul1
-    volumes:
-      - ./docFiles/prometheus.yml:/prometheus-data/prometheus.yml
-    command:  --log.level=debug --config.file=/prometheus-data/prometheus.yml
-
-
-# Mark rdkb-simulator Services
-  simulator: &simulator
-    image: xmidt/simulator:${SIMULATOR_VERSION}
+    image: prom/prometheus
+    networks: 
+      - xmidt
+    ports: 
+      - "9090:9090"
+    volumes: 
+      - "./docFiles/prometheus.yml:/prometheus-data/prometheus.yml"
+  scytale: 
+    container_name: scytale
+    depends_on: 
+      - petasos
+      - argus
+    environment: 
+      - "CONSUL_HOST=consul0:8500"
+      - "ARGUS_HOST=http://argus:6600"
+      - TRACING_PROVIDER_NAME=zipkin
+      - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
+    image: "xmidt/scytale:${SCYTALE_VERSION}"
+    networks: 
+      - xmidt
+    ports: 
+      - "6300-6303:6300-6303"
+  simulator: 
     container_name: simulator
-    depends_on:
+    depends_on: 
       - talaria-0
       - talaria-1
       - talaria-2
       - petasos
       - themis
-    networks:
+    image: "xmidt/simulator:${SIMULATOR_VERSION}"
+    networks: 
       - xmidt
-
-# Mark Consul Definitions
-  consul0:
-    image: consul:latest
-    container_name: consul0
-    hostname: consul0
-    ports:
-      - 8400:8400
-      - 8500:8500
-      - 8600:8600
-      - 8600:8600/udp
-    networks:
-      - xmidt
-    volumes:
-      - ./docFiles/consul-0.json:/consul.json
-    command: "agent -server -bootstrap-expect 1 -ui -client 0.0.0.0 -config-file consul.json"
-  consul1:
-    image: consul:latest
-    container_name: consul1
-    hostname: consul1
-    ports:
-      - 8401:8400
-      - 8501:8500
-      - 8601:8600
-      - 8601:8600/udp
-    networks:
-      - xmidt
-    depends_on:
+  talaria-0: 
+    container_name: talaria0
+    depends_on: 
       - consul0
-    volumes:
-      - ./docFiles/consul-1.json:/consul.json
-    command: "agent -server -bootstrap-expect 1 -ui -client 0.0.0.0 -config-file consul.json"
-
-  dynamodb:
-    image: amazon/dynamodb-local
-    hostname: dynamodb-local
-    ports:
-      - "8000:8000"
-    networks:
+      - themis
+    environment: 
+      - "CONSUL_HOST=consul0:8500"
+      - TRACING_PROVIDER_NAME=zipkin
+      - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
+    image: "xmidt/talaria:${TALARIA_VERSION}"
+    networks: 
       - xmidt
-
-  zipkin:
-    image: openzipkin/zipkin 
-    ports:
+    ports: 
+      - "6200-6204:6200-6204"
+  talaria-1: 
+    container_name: talaria1
+    depends_on: 
+      - consul0
+      - themis
+    environment: 
+      - "CONSUL_HOST=consul0:8500"
+      - TRACING_PROVIDER_NAME=zipkin
+      - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
+    image: "xmidt/talaria:${TALARIA_VERSION}"
+    networks: 
+      - xmidt
+    ports: 
+      - "6210-6214:6200-6204"
+  talaria-2: 
+    container_name: talaria2
+    depends_on: 
+      - consul0
+      - themis
+    environment: 
+      - "CONSUL_HOST=consul1:8500"
+      - TRACING_PROVIDER_NAME=zipkin
+      - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
+    image: "xmidt/talaria:${TALARIA_VERSION}"
+    networks: 
+      - xmidt
+    ports: 
+      - "6220-6224:6200-6204"
+  themis: 
+    container_name: themis
+    environment: 
+      - "CONSUL_HOST=consul0:8500"
+      - TRACING_PROVIDER_NAME=zipkin
+      - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
+    image: "xmidt/themis:${THEMIS_VERSION}"
+    networks: 
+      - xmidt
+    ports: 
+      - "6500-6504:6500-6504"
+  tr1d1um: 
+    container_name: tr1d1um
+    depends_on: 
+      - argus
+      - scytale
+    environment: 
+      - "CONSUL_HOST=consul0:8500"
+      - "ARGUS_HOST=http://argus:6600"
+      - TRACING_PROVIDER_NAME=zipkin
+      - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
+    image: "xmidt/tr1d1um:${TR1D1UM_VERSION}"
+    networks: 
+      - xmidt
+    ports: 
+      - "6100-6103:6100-6103"
+  zipkin: 
+    image: openzipkin/zipkin
+    networks: 
+      - xmidt
+    ports: 
       - "9411:9411"
-    networks:
-      - xmidt
-
-networks:
-  xmidt:
+version: "3.8"
