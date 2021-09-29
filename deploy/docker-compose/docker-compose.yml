@@ -177,8 +177,8 @@ services:
     environment: 
       - "CONSUL_HOST=consul0:8500"
       - "ARGUS_HOST=http://argus:6600"
-      - TRACING_PROVIDER_NAME=zipkin
-      - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
+      - TRACING_PROVIDER_NAME=otlp
+      - "TRACING_PROVIDER_ENDPOINT=localhost:55680"
     image: "xmidt/tr1d1um:${TR1D1UM_VERSION}"
     networks: 
       - xmidt
