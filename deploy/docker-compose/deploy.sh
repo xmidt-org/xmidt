@@ -31,10 +31,14 @@ if [[ $? -ne 0 ]]; then
       --table-name gifnoc \
       --attribute-definitions \
           AttributeName=bucket,AttributeType=S \
+          AttributeName=expires,AttributeType=N \
           AttributeName=id,AttributeType=S \
       --key-schema \
           AttributeName=bucket,KeyType=HASH \
           AttributeName=id,KeyType=RANGE \
+    --global-secondary-indexes \
+        "[{\"IndexName\": \"Expires-index\",\"KeySchema\":[{\"AttributeName\":\"bucket\",\"KeyType\":\"HASH\"}, {\"AttributeName\":\"expires\",\"KeyType\":\"RANGE\"}], \
+        \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 10, \"WriteCapacityUnits\": 5      },\"Projection\":{\"ProjectionType\":\"ALL\"}}]" \
       --provisioned-throughput \
           ReadCapacityUnits=10,WriteCapacityUnits=5 \
       --stream-specification StreamEnabled=true,StreamViewType=NEW_AND_OLD_IMAGES \
