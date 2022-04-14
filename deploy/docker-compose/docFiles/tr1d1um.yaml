@@ -1,0 +1,62 @@
+---
+  fqdn: tr1d1um
+  env: test
+  scheme: http
+  hooksScheme: http
+
+  primary:
+    address: ":6100"
+  health:
+    address: ":6101"
+    options:
+      - "PayloadsOverZero"
+      - "PayloadsOverHundred"
+      - "PayloadsOverThousand"
+      - "PayloadsOverTenThousand"
+    readTimeout: "15s"
+    idleTimeout: "15s"
+  pprof:
+    address: ":6102"
+    readTimeout: "15s"
+    idleTimeout: "15s"
+  metric:
+    address: ":6103"
+    metricsOptions:
+      namespace: "webpa"
+      subsystem: "tr1d1um"
+    readTimeout: "15s"
+    idleTimeout: "15s"
+  log:
+    file: "stdout"
+    level: "INFO"
+    json: false
+    reducedLoggingResponseCodes: [200, 504]
+    
+  webhooksEnabled: true
+
+  start:
+    duration: 1
+    apiPath: tr1d1um:6100/hooks
+
+  waitForDns: 0
+
+  aws:
+    accessKey: "supbro"
+    secretKey: "nahbro"
+    env: local-dev
+    sns:
+      awsEndpoint: http://goaws:4100
+      region: "us-east-1"
+      topicArn: arn:aws:sns:us-east-1:000000000000:xmidt-local-caduceus
+      urlPath: "/api/v2/aws/sns"
+
+  authHeader: ["dXNlcjpwYXNz"]
+  targetURL: http://scytale:6300
+  WRPSource: "dns:tr1d1um.example.net"
+  supportedServices:
+    - "config"
+  clientTimeout: "135s"
+  respWaitTimeout: "129s"
+  netDialerTimeout: "5s"
+  requestRetryInterval: "2s"
+  requestMaxRetries: 2

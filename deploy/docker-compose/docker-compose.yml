@@ -66,6 +66,28 @@ services:
       - xmidt
     ports: 
       - "8000:8000"
+  goaws:
+    image: goaws:local
+    container_name: goaws
+    ports:
+      - 4100:4100
+    networks:
+      - xmidt
+    volumes:
+      - ./docFiles/sns.yaml:/conf/goaws.yaml
+  hecate:
+    container_name: hecate
+    depends_on:
+      - goaws
+    environment:
+      - AWS_ACCESS_KEY=supbro
+      - AWS_SECRET_KEY=nahbro
+    hostname: hecate
+    image: "xmidt/hecate:latest"
+    networks:
+      - xmidt
+    ports:
+      - "6700-6703:6700-6703"
   petasos: 
     container_name: petasos
     depends_on: 
@@ -180,6 +202,8 @@ services:
       - TRACING_PROVIDER_NAME=zipkin
       - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
     image: "xmidt/tr1d1um:${TR1D1UM_VERSION}"
+    volumes:
+      - ./docFiles/tr1d1um.yaml:/etc/tr1d1um/tr1d1um.yaml
     networks: 
       - xmidt
     ports: 

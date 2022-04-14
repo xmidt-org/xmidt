@@ -10,10 +10,17 @@ if [[ "$(docker images -q xmidt/simulator:latest 2> /dev/null)" == "" ]]; then
 fi
 popd
 
+echo "Building goaws..."
+git clone git@github.com:kcajmagic/goaws.git /tmp/goaws
+pushd /tmp/goaws
+git checkout feature/improve_docker_file
+docker build -t goaws:local .
+popd
+
 echo "Running services..."
 CADUCEUS_VERSION=${CADUCEUS_VERSION:-latest} \
 ARGUS_VERSION=${ARGUS_VERSION:-latest} \
-TR1D1UM_VERSION=${TR1D1UM_VERSION:-latest} \
+TR1D1UM_VERSION=${TR1D1UM_VERSION:-0.5.1} \
 SCYTALE_VERSION=${SCYTALE_VERSION:-latest} \
 PETASOS_VERSION=${PETASOS_VERSION:-latest} \
 TALARIA_VERSION=${TALARIA_VERSION:-latest} \
