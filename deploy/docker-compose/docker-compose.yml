@@ -2,12 +2,12 @@
 networks: 
   xmidt: ~
 services: 
-  argus: 
-    container_name: argus
+  argus0: 
+    container_name: argus0
     depends_on: 
       - dynamodb
     environment: 
-      - "AWS_ENDPOINT=http://dynamodb:8000"
+      - "AWS_ENDPOINT=http://dynamodb0:8000"
       - "TRACING_PROVIDER_NAME=zipkin"
       - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
       - "ACCESS_LEVEL_CAPABILITY=x1:issuer:test:.*:all"
@@ -16,13 +16,27 @@ services:
       - xmidt
     ports: 
       - "6600-6603:6600-6603"
+  argus1: 
+    container_name: argus1
+    depends_on: 
+      - dynamodb
+    environment: 
+      - "AWS_ENDPOINT=http://dynamodb1:8100"
+      - "TRACING_PROVIDER_NAME=zipkin"
+      - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
+      - "ACCESS_LEVEL_CAPABILITY=x1:issuer:test:.*:all"
+    image: "xmidt/argus:${ARGUS_VERSION}"
+    networks: 
+      - xmidt
+    ports: 
+      - "6800-6803:6600-6603"
   caduceus: 
     container_name: caduceus
     depends_on: 
-      - argus
+      - argus1
     environment: 
       - "CONSUL_HOST=consul0:8500"
-      - "ARGUS_HOST=http://argus:6600"
+      - "ARGUS_HOST=http://argus1:6800"
     image: "xmidt/caduceus:${CADUCEUS_VERSION}"
     networks: 
       - xmidt
@@ -58,30 +72,26 @@ services:
       - "8601:8600/udp"
     volumes: 
       - "./docFiles/consul-1.json:/consul.json"
-  dynamodb: 
-    container_name: dynamo-xmidt
+  dynamodb0: 
+    container_name: dynamo-xmidt0
     hostname: dynamodb
     image: amazon/dynamodb-local
     networks: 
       - xmidt
     ports: 
       - "8000:8000"
-  goaws:
-    image: goaws:local
-    container_name: goaws
-    ports:
-      - 4100:4100
-    networks:
+  dynamodb1: 
+    container_name: dynamo-xmidt1
+    hostname: dynamodb
+    image: amazon/dynamodb-local
+    networks: 
       - xmidt
-    volumes:
-      - ./docFiles/sns.yaml:/conf/goaws.yaml
+    ports: 
+      - "8100:8000"
   hecate:
     container_name: hecate
     depends_on:
       - goaws
-    environment:
-      - AWS_ACCESS_KEY=supbro
-      - AWS_SECRET_KEY=nahbro
     hostname: hecate
     image: "xmidt/hecate:latest"
     networks:
@@ -116,10 +126,10 @@ services:
     container_name: scytale
     depends_on: 
       - petasos
-      - argus
+      - argus0
     environment: 
       - "CONSUL_HOST=consul0:8500"
-      - "ARGUS_HOST=http://argus:6600"
+      - "ARGUS_HOST=http://argus0:6600"
       - TRACING_PROVIDER_NAME=zipkin
       - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
     image: "xmidt/scytale:${SCYTALE_VERSION}"
@@ -194,11 +204,11 @@ services:
   tr1d1um: 
     container_name: tr1d1um
     depends_on: 
-      - argus
+      - argus0
       - scytale
     environment: 
       - "CONSUL_HOST=consul0:8500"
-      - "ARGUS_HOST=http://argus:6600"
+      - "ARGUS_HOST=http://argus0:6600"
       - TRACING_PROVIDER_NAME=zipkin
       - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
     image: "xmidt/tr1d1um:${TR1D1UM_VERSION}"

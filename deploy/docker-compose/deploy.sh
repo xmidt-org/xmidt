@@ -20,7 +20,7 @@ popd
 echo "Running services..."
 CADUCEUS_VERSION=${CADUCEUS_VERSION:-latest} \
 ARGUS_VERSION=${ARGUS_VERSION:-latest} \
-TR1D1UM_VERSION=${TR1D1UM_VERSION:-0.5.1} \
+TR1D1UM_VERSION=${TR1D1UM_VERSION:-latest} \
 SCYTALE_VERSION=${SCYTALE_VERSION:-latest} \
 PETASOS_VERSION=${PETASOS_VERSION:-latest} \
 TALARIA_VERSION=${TALARIA_VERSION:-latest} \
@@ -35,6 +35,32 @@ sleep 10
 AWS_ACCESS_KEY_ID=accessKey AWS_SECRET_ACCESS_KEY=secretKey aws dynamodb  --endpoint-url http://localhost:8000 describe-table --table-name gifnoc --region us-east-2 --output text > /dev/null 2> /dev/null
 if [[ $? -ne 0 ]]; then
   AWS_ACCESS_KEY_ID=accessKey AWS_SECRET_ACCESS_KEY=secretKey aws dynamodb  --endpoint-url http://localhost:8000 create-table \
+      --table-name gifnoc \
+      --attribute-definitions \
+          AttributeName=bucket,AttributeType=S \
+          AttributeName=expires,AttributeType=N \
+          AttributeName=id,AttributeType=S \
+      --key-schema \
+          AttributeName=bucket,KeyType=HASH \
+          AttributeName=id,KeyType=RANGE \
+    --global-secondary-indexes \
+        "[{\"IndexName\": \"Expires-index\",\"KeySchema\":[{\"AttributeName\":\"bucket\",\"KeyType\":\"HASH\"}, {\"AttributeName\":\"expires\",\"KeyType\":\"RANGE\"}], \
+        \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 10, \"WriteCapacityUnits\": 5      },\"Projection\":{\"ProjectionType\":\"ALL\"}}]" \
+      --provisioned-throughput \
+          ReadCapacityUnits=10,WriteCapacityUnits=5 \
+      --stream-specification StreamEnabled=true,StreamViewType=NEW_AND_OLD_IMAGES \
+      --region us-east-2 \
+      --output text
+
+  AWS_ACCESS_KEY_ID=accessKey AWS_SECRET_ACCESS_KEY=secretKey aws dynamodb \
+    --endpoint-url http://localhost:8000 --region us-east-2 update-time-to-live \
+    --table-name gifnoc --time-to-live-specification "Enabled=true, AttributeName=expires" \
+    --output text
+fi
+
+AWS_ACCESS_KEY_ID=accessKey AWS_SECRET_ACCESS_KEY=secretKey aws dynamodb  --endpoint-url http://localhost:8100 describe-table --table-name gifnoc --region us-east-2 --output text > /dev/null 2> /dev/null
+if [[ $? -ne 0 ]]; then
+  AWS_ACCESS_KEY_ID=accessKey AWS_SECRET_ACCESS_KEY=secretKey aws dynamodb  --endpoint-url http://localhost:8100 create-table \
       --table-name gifnoc \
       --attribute-definitions \
           AttributeName=bucket,AttributeType=S \
