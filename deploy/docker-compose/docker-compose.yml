@@ -11,7 +11,7 @@ services:
       - "TRACING_PROVIDER_NAME=zipkin"
       - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
       - "ACCESS_LEVEL_CAPABILITY=x1:issuer:test:.*:all"
-    image: "xmidt/argus:${ARGUS_VERSION}"
+    image: "ghcr.io/xmidt-org/argus:${ARGUS_VERSION}"
     networks: 
       - xmidt
     ports: 
@@ -23,7 +23,7 @@ services:
     environment: 
       - "CONSUL_HOST=consul0:8500"
       - "ARGUS_HOST=http://argus:6600"
-    image: "xmidt/caduceus:${CADUCEUS_VERSION}"
+    image: "ghcr.io/xmidt-org/caduceus:${CADUCEUS_VERSION}"
     networks: 
       - xmidt
     ports: 
@@ -32,32 +32,32 @@ services:
     command: "agent -server -bootstrap-expect 1 -ui -client 0.0.0.0 -config-file consul.json"
     container_name: consul0
     hostname: consul0
-    image: "consul:latest"
+    image: "hashicorp/consul:${CONSUL_VERSION}"
     networks: 
       - xmidt
     ports: 
       - "8400:8400"
       - "8500:8500"
-      - "8600:8600"
+      - "8600:8600/tcp"
       - "8600:8600/udp"
     volumes: 
-      - "./docFiles/consul-0.json:/consul.json"
+      - "./docFiles/consul-0.json:/consul.json:z"
   consul1: 
     command: "agent -server -bootstrap-expect 1 -ui -client 0.0.0.0 -config-file consul.json"
     container_name: consul1
     depends_on: 
       - consul0
     hostname: consul1
-    image: "consul:latest"
+    image: "hashicorp/consul:${CONSUL_VERSION}"
     networks: 
       - xmidt
     ports: 
       - "8401:8400"
       - "8501:8500"
-      - "8601:8600"
+      - "8601:8600/tcp"
       - "8601:8600/udp"
     volumes: 
-      - "./docFiles/consul-1.json:/consul.json"
+      - "./docFiles/consul-1.json:/consul.json:z"
   dynamodb: 
     container_name: dynamo-xmidt
     hostname: dynamodb
@@ -72,7 +72,7 @@ services:
       - consul0
     environment: 
       - "CONSUL_HOST=consul0:8500"
-    image: "xmidt/petasos:${PETASOS_VERSION}"
+    image: "ghcr.io/xmidt-org/petasos:${PETASOS_VERSION}"
     networks: 
       - xmidt
     ports: 
@@ -89,7 +89,7 @@ services:
     ports: 
       - "9090:9090"
     volumes: 
-      - "./docFiles/prometheus.yml:/prometheus-data/prometheus.yml"
+      - "./docFiles/prometheus.yml:/prometheus-data/prometheus.yml:z"
   scytale: 
     container_name: scytale
     depends_on: 
@@ -100,7 +100,7 @@ services:
       - "ARGUS_HOST=http://argus:6600"
       - TRACING_PROVIDER_NAME=zipkin
       - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
-    image: "xmidt/scytale:${SCYTALE_VERSION}"
+    image: "ghcr.io/xmidt-org/scytale:${SCYTALE_VERSION}"
     networks: 
       - xmidt
     ports: 
@@ -125,7 +125,7 @@ services:
       - "CONSUL_HOST=consul0:8500"
       - TRACING_PROVIDER_NAME=zipkin
       - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
-    image: "xmidt/talaria:${TALARIA_VERSION}"
+    image: "ghcr.io/xmidt-org/talaria:${TALARIA_VERSION}"
     networks: 
       - xmidt
     ports: 
@@ -139,7 +139,7 @@ services:
       - "CONSUL_HOST=consul0:8500"
       - TRACING_PROVIDER_NAME=zipkin
       - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
-    image: "xmidt/talaria:${TALARIA_VERSION}"
+    image: "ghcr.io/xmidt-org/talaria:${TALARIA_VERSION}"
     networks: 
       - xmidt
     ports: 
@@ -153,7 +153,7 @@ services:
       - "CONSUL_HOST=consul1:8500"
       - TRACING_PROVIDER_NAME=zipkin
       - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
-    image: "xmidt/talaria:${TALARIA_VERSION}"
+    image: "ghcr.io/xmidt-org/talaria:${TALARIA_VERSION}"
     networks: 
       - xmidt
     ports: 
@@ -164,7 +164,7 @@ services:
       - "CONSUL_HOST=consul0:8500"
       - TRACING_PROVIDER_NAME=zipkin
       - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
-    image: "xmidt/themis:${THEMIS_VERSION}"
+    image: "ghcr.io/xmidt-org/themis:${THEMIS_VERSION}"
     networks: 
       - xmidt
     ports: 
@@ -179,7 +179,7 @@ services:
       - "ARGUS_HOST=http://argus:6600"
       - TRACING_PROVIDER_NAME=zipkin
       - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
-    image: "xmidt/tr1d1um:${TR1D1UM_VERSION}"
+    image: "ghcr.io/xmidt-org/tr1d1um:${TR1D1UM_VERSION}"
     networks: 
       - xmidt
     ports: 
