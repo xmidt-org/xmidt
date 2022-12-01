@@ -1,0 +1,34 @@
+receivers:
+  otlp:
+      # Protocols defines the protocols enabled for this receiver. At least one protocol of choice must
+      # be enabled.
+    protocols:
+        # The presence of the http section enables the HTTP server on the default port (4318)
+      http:
+
+        # The presence of the gRPC section enables the gRPC server on the default port (4317)
+      grpc:
+
+processors:
+  batch:
+  # Datadog APM Intake limit is 3.2MB. Let's make sure the batches do not go over that.
+    send_batch_max_size: 1000
+    send_batch_size: 100
+    timeout: 10s 
+
+exporters:
+  datadog/api:
+    hostname: "tr1d1um-local"
+    api:
+      key: 
+
+service:
+  pipelines:
+    metrics:
+      receivers: [ otlp]
+      processors: [batch]
+      exporters: [datadog/api]
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [datadog/api]
