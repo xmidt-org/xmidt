@@ -30,7 +30,7 @@ brought up for current ease of use. Future releases will deprecate Tr1d1um.
 
 3. To bring the containers down:
    ```bash
-   docker-compose -f deploy/docker-compose/docker-compose.yml down
+   docker-compose -f docker-compose.yml down
    ```
 
 ### INFO
