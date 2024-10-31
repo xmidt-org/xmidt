@@ -1,0 +1,196 @@
+--- 
+networks: 
+  xmidt: ~
+services: 
+  argus: 
+    container_name: argus
+    depends_on: 
+      - dynamodb
+    environment: 
+      - "AWS_ENDPOINT=http://dynamodb:8000"
+      - "TRACING_PROVIDER_NAME=zipkin"
+      - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
+      - "ACCESS_LEVEL_CAPABILITY=x1:issuer:test:.*:all"
+    image: "ghcr.io/xmidt-org/argus:${ARGUS_VERSION}"
+    networks: 
+      - xmidt
+    ports: 
+      - "6600-6603:6600-6603"
+  caduceus: 
+    container_name: caduceus
+    depends_on: 
+      - argus
+    environment: 
+      - "CONSUL_HOST=consul0:8500"
+      - "ARGUS_HOST=http://argus:6600"
+    image: "ghcr.io/xmidt-org/caduceus:${CADUCEUS_VERSION}"
+    networks: 
+      - xmidt
+    ports: 
+      - "6000-6003:6000-6003"
+  consul0: 
+    command: "agent -server -bootstrap-expect 1 -ui -client 0.0.0.0 -config-file consul.json"
+    container_name: consul0
+    hostname: consul0
+    image: "hashicorp/consul:${CONSUL_VERSION}"
+    networks: 
+      - xmidt
+    ports: 
+      - "8400:8400"
+      - "8500:8500"
+      - "8600:8600/tcp"
+      - "8600:8600/udp"
+    volumes: 
+      - "./docFiles/consul-0.json:/consul.json:z"
+  consul1: 
+    command: "agent -server -bootstrap-expect 1 -ui -client 0.0.0.0 -config-file consul.json"
+    container_name: consul1
+    depends_on: 
+      - consul0
+    hostname: consul1
+    image: "hashicorp/consul:${CONSUL_VERSION}"
+    networks: 
+      - xmidt
+    ports: 
+      - "8401:8400"
+      - "8501:8500"
+      - "8601:8600/tcp"
+      - "8601:8600/udp"
+    volumes: 
+      - "./docFiles/consul-1.json:/consul.json:z"
+  dynamodb: 
+    container_name: dynamo-xmidt
+    hostname: dynamodb
+    image: amazon/dynamodb-local
+    networks: 
+      - xmidt
+    ports: 
+      - "9000:9000"
+  petasos: 
+    container_name: petasos
+    depends_on: 
+      - consul0
+    environment: 
+      - "CONSUL_HOST=consul0:8500"
+    image: "ghcr.io/xmidt-org/petasos:${PETASOS_VERSION}"
+    networks: 
+      - xmidt
+    ports: 
+      - "6400-6403:6400-6403"
+  prometheus: 
+    command: "--log.level=debug --config.file=/prometheus-data/prometheus.yml"
+    container_name: prometheus-xmidt
+    depends_on: 
+      - consul0
+      - consul1
+    image: prom/prometheus
+    networks: 
+      - xmidt
+    ports: 
+      - "9090:9090"
+    volumes: 
+      - "./docFiles/prometheus.yml:/prometheus-data/prometheus.yml:z"
+  scytale: 
+    container_name: scytale
+    depends_on: 
+      - petasos
+      - argus
+    environment: 
+      - "CONSUL_HOST=consul0:8500"
+      - "ARGUS_HOST=http://argus:6600"
+      - TRACING_PROVIDER_NAME=zipkin
+      - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
+    image: "ghcr.io/xmidt-org/scytale:${SCYTALE_VERSION}"
+    networks: 
+      - xmidt
+    ports: 
+      - "6300-6303:6300-6303"
+  simulator: 
+    container_name: xmidt-agent
+    depends_on: 
+      - talaria-0
+      - talaria-1
+      - talaria-2
+      - petasos
+      - themis
+    image: "ghcr.io/xmidt-org/xmidt-agent:${SIMULATOR_VERSION}"
+    networks: 
+      - xmidt
+    volumes: 
+      - "./docFiles/mock_tr181.json:/mock_tr181.json"
+      - "./docFiles/xmidt-agent.yaml:/etc/xmidt-agent/xmidt-agent.yaml"
+  talaria-0: 
+    container_name: talaria
+    depends_on: 
+      - consul0
+      - themis
+    environment: 
+      - "CONSUL_HOST=consul0:8500"
+      - TRACING_PROVIDER_NAME=zipkin
+      - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
+    image: "ghcr.io/xmidt-org/talaria:${TALARIA_VERSION}"
+    networks: 
+      - xmidt
+    ports: 
+      - "6200-6204:6200-6204"
+  talaria-1: 
+    container_name: talaria1
+    depends_on: 
+      - consul0
+      - themis
+    environment: 
+      - "CONSUL_HOST=consul0:8500"
+      - TRACING_PROVIDER_NAME=zipkin
+      - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
+    image: "ghcr.io/xmidt-org/talaria:${TALARIA_VERSION}"
+    networks: 
+      - xmidt
+    ports: 
+      - "6210-6214:6200-6204"
+  talaria-2: 
+    container_name: talaria2
+    depends_on: 
+      - consul0
+      - themis
+    environment: 
+      - "CONSUL_HOST=consul1:8500"
+      - TRACING_PROVIDER_NAME=zipkin
+      - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
+    image: "ghcr.io/xmidt-org/talaria:${TALARIA_VERSION}"
+    networks: 
+      - xmidt
+    ports: 
+      - "6220-6224:6200-6204"
+  themis: 
+    container_name: themis
+    environment: 
+      - "CONSUL_HOST=consul0:8500"
+      - TRACING_PROVIDER_NAME=zipkin
+      - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
+    image: "ghcr.io/xmidt-org/themis:${THEMIS_VERSION}"
+    networks: 
+      - xmidt
+    ports: 
+      - "6500-6504:6500-6504"
+  tr1d1um: 
+    container_name: tr1d1um
+    depends_on: 
+      - argus
+      - scytale
+    environment: 
+      - "CONSUL_HOST=consul0:8500"
+      - "ARGUS_HOST=http://argus:6600"
+      - TRACING_PROVIDER_NAME=zipkin
+      - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
+    image: "ghcr.io/xmidt-org/tr1d1um:${TR1D1UM_VERSION}"
+    networks: 
+      - xmidt
+    ports: 
+      - "6100-6103:6100-6103"
+  zipkin: 
+    image: openzipkin/zipkin
+    networks: 
+      - xmidt
+    ports: 
+      - "9411:9411"
+version: "3.8"

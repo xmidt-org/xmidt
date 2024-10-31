@@ -1,0 +1,33 @@
+# SPDX-FileCopyrightText: 2023 Comcast Cable Communications Management, LLC
+# SPDX-License-Identifier: Apache-2.0
+
+websocket:
+  url_path: api/v2/device
+  back_up_url: http://petasos:6400
+xmidt_credentials:
+  url: http://themis:6501/issue
+  file_name: xmidt_agent_creds.txt
+  file_permissions: 0777
+identity:
+  device_id: mac:4ca161000109
+  serial_number: 1800deadbeef
+  hardware_model: fooModel
+  hardware_manufacturer: barManufacturer
+  firmware_version: v0.0.1
+  partner_id: foobar
+xmidt_service:                                                
+  backoff:                                                 
+    max_delay: 600s                                     
+    min_delay: 7s                                      
+  url: http://petasos:6400
+operational_state:
+  last_reboot_reason: sleepy
+  boot_time: "2024-02-28T01:04:27Z"
+storage:
+  temporary: ~/local-rdk-testing/temporary
+  durable: ~/local-rdk-testing/durable
+mock_tr_181:
+  enabled: true
+  file_path: /mock_tr181.json
+lib_parodus:
+  parodus_service_url: "tcp://127.0.0.1:6666"
