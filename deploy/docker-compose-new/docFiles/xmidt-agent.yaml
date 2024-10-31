@@ -9,7 +9,7 @@ xmidt_credentials:
   file_name: xmidt_agent_creds.txt
   file_permissions: 0777
 identity:
-  device_id: mac:4ca161000109
+  device_id: mac:112233445566
   serial_number: 1800deadbeef
   hardware_model: fooModel
   hardware_manufacturer: barManufacturer
