@@ -1,0 +1,15 @@
+{
+  "datacenter": "dc0",
+  "node_name": "ConsulServer0",
+  "log_level": "INFO",
+  "telemetry": {
+    "disable_hostname": true,
+     "statsite_address": "127.0.0.1:8700",
+     "prometheus_retention_time" : "1h",
+     "prefix_filter": [
+       "+consul.raft.apply",
+       "-consul.http",
+       "+consul.catalog.service"
+     ]
+  }
+}
