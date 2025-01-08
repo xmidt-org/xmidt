@@ -31,3 +31,6 @@ mock_tr_181:
   file_path: /mock_tr181.json
 lib_parodus:
   parodus_service_url: "tcp://127.0.0.1:6666"
+logger:
+  level: debug
+  development: true
