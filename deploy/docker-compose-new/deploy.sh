@@ -3,12 +3,12 @@
 DIR=$( cd "$(dirname "$0")" || exit; pwd -P )
 ROOT_DIR=$DIR/../../
 
-pushd "$ROOT_DIR" || exit
-# echo "Building Simulator..."
-# if [[ "$(docker images -q xmidt/simulator:latest 2> /dev/null)" == "" ]]; then
-#   docker build -t xmidt/simulator:latest $ROOT_DIR/simulator
-# fi
-popd
+# pushd "$ROOT_DIR" || exit
+# # echo "Building Simulator..."
+# # if [[ "$(docker images -q xmidt/simulator:latest 2> /dev/null)" == "" ]]; then
+# #   docker build -t xmidt/simulator:latest $ROOT_DIR/simulator
+# # fi
+# popd
 
 echo "Running services..."
 CONSUL_VERSION=${CONSUL_VERSION:-1.12.6} \

@@ -62,17 +62,22 @@ services:
     container_name: dynamo-xmidt
     hostname: dynamodb
     image: amazon/dynamodb-local
+    environment:
+      AWS_ACCESS_KEY_ID: accessKey
+      AWS_SECRET_ACCESS_KEY: secretKey
+      AWS_REGION: local
+    command: -jar DynamoDBLocal.jar -inMemory -sharedDb -port 4566
     networks: 
       - xmidt
     ports: 
       - "4566:4566"
     healthcheck:
-      test:
+     test:
        ["CMD-SHELL",'if [ "$(curl -s -o /dev/null -I -w ''%{http_code}'' http://localhost:4566)" == "400" ]; then exit 0; else exit 1; fi',]
-      interval: 5s
-      timeout: 30s
-      retries: 3
-      start_period: 5s
+     interval: 5s
+     timeout: 30s
+     retries: 3
+     start_period: 5s
   petasos: 
     container_name: petasos
     depends_on: 
@@ -222,4 +227,3 @@ services:
       - xmidt
     ports: 
       - "9411:9411"
-version: "3.8"
