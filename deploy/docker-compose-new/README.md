@@ -1,9 +1,5 @@
 # Deploying XMiDT
 
-## Docker/awscli
-
-In order to deploy into Docker, make sure [Docker is installed](https://docs.docker.com/install/). Additionally for goaws, make sure that awscli is intalled.
-
 #### Deploy
 _**Note**_: While Tr1d1um is not part of XMiDT(it is WebPA), it is recommended to be
 brought up for current ease of use. Future releases will deprecate Tr1d1um.
@@ -12,7 +8,9 @@ brought up for current ease of use. Future releases will deprecate Tr1d1um.
 
 2. Run `deploy/docker-compose-new/deploy.sh`  
 
-    This will build `goaws` locally. It will then run `docker-compose up` which uses images of `talaria`, `scytale`, `petasos`, `caduceus`, `xmidt-agent` (device simulator) and `tr1d1um` from dockerhub. 
+    It will then run `docker-compose up` which uses images of `talaria`, `scytale`, `petasos`, `caduceus`, `xmidt-agent` (device simulator) and `tr1d1um` from dockerhub. 
+
+    It will also automatically build a dynamo db resource. 
 
     To pull specific versions of the images, just set the `<SERVICE>_VERSION` env variables when running the shell script.
 
@@ -40,10 +38,10 @@ deal with just one datacenter. Since all ports are exposed, the names might seem
 
 #### Connection
 ##### Inside Docker
-If the Parodus instance is inside of docker, life is easy! Just connect to the cluster with `petasos:6400`.
+If the Xmidt-Agent instance is inside of docker, life is easy! Just connect to the cluster with `petasos:6400`.
 
 ##### Outside Docker
-if the Parodus instance is outside of docker and the ports are exposed correctly, life
+if the Xmidt-Agent instance is outside of docker and the ports are exposed correctly, life
 will be hard since you will need to handle the redirect.
 You can initially connect to 'localhost:6400' but on the redirect change `talaria-1:6210` to `localhost:6210`
 

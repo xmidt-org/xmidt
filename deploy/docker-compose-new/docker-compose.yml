@@ -7,7 +7,7 @@ services:
     depends_on: 
       - dynamodb
     environment: 
-      - "AWS_ENDPOINT=http://dynamodb:8000"
+      - "AWS_ENDPOINT=http://dynamodb:4566"
       - "TRACING_PROVIDER_NAME=zipkin"
       - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
       - "ACCESS_LEVEL_CAPABILITY=x1:issuer:test:.*:all"
@@ -62,10 +62,22 @@ services:
     container_name: dynamo-xmidt
     hostname: dynamodb
     image: amazon/dynamodb-local
+    environment:
+      AWS_ACCESS_KEY_ID: accessKey
+      AWS_SECRET_ACCESS_KEY: secretKey
+      AWS_REGION: local
+    command: -jar DynamoDBLocal.jar -inMemory -sharedDb -port 4566
     networks: 
       - xmidt
     ports: 
-      - "9000:9000"
+      - "4566:4566"
+    healthcheck:
+     test:
+       ["CMD-SHELL",'if [ "$(curl -s -o /dev/null -I -w ''%{http_code}'' http://localhost:4566)" == "400" ]; then exit 0; else exit 1; fi',]
+     interval: 5s
+     timeout: 30s
+     retries: 3
+     start_period: 5s
   petasos: 
     container_name: petasos
     depends_on: 
@@ -172,6 +184,8 @@ services:
       - xmidt
     ports: 
       - "6500-6504:6500-6504"
+    volumes: 
+      - "./docFiles/themis.yaml:/etc/themis/themis.yaml"
   tr1d1um: 
     container_name: tr1d1um
     depends_on: 
@@ -187,10 +201,31 @@ services:
       - xmidt
     ports: 
       - "6100-6103:6100-6103"
+  awscli-dynamo:
+    image: amazon/aws-cli
+    networks:
+      - xmidt
+    depends_on:
+      dynamodb:
+        condition: service_healthy
+    ports: 
+      - "4577:4577"
+    environment:
+      AWS_ACCESS_KEY_ID: accessKey
+      AWS_SECRET_ACCESS_KEY: secretKey
+      AWS_REGION: local
+    command: "dynamodb  --endpoint-url http://dynamodb:4566 create-table \
+       --table-name gifnoc \
+       --attribute-definitions \
+          AttributeName=bucket,AttributeType=S \
+          AttributeName=expires,AttributeType=N \
+          AttributeName=id,AttributeType=S \
+       --key-schema \
+          AttributeName=bucket,KeyType=HASH \
+          AttributeName=id,KeyType=RANGE"   
   zipkin: 
     image: openzipkin/zipkin
     networks: 
       - xmidt
     ports: 
       - "9411:9411"
-version: "3.8"
