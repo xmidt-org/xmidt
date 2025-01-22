@@ -184,6 +184,8 @@ services:
       - xmidt
     ports: 
       - "6500-6504:6500-6504"
+    volumes: 
+      - "./docFiles/themis.yaml:/etc/themis/themis.yaml"
   tr1d1um: 
     container_name: tr1d1um
     depends_on: 
