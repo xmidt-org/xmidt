@@ -1,0 +1,122 @@
+# SPDX-FileCopyrightText: 2022 Comcast Cable Communications Management, LLC
+# SPDX-License-Identifier: Apache-2.0
+---
+# The unique fully-qualified-domain-name of the server.  It is provided to
+# the X-Scytale-Server header for showing what server fulfilled the request
+# sent.
+# (Optional)
+server: themis
+
+########################################
+#   Labeling/Tracing via HTTP Headers Configuration
+########################################
+
+# Provides this build number to the X-Scytale-Build header for
+# showing machine version information.  The build number SHOULD
+# match the scheme `version-build` but there is not a strict requirement.
+# (Optional)
+build: unknown
+
+# stage is used for doing complex spruce manipulation
+# change this will only effect spruce and the vars referencing it
+stage: "development"
+
+servers:
+  key:
+    address: :6500
+    disableHTTPKeepAlives: true
+    header:
+      X-Midt-Server:
+        - themis
+      X-Midt-Version:
+        - unknown
+  issuer:
+    address: :6501
+    disableHTTPKeepAlives: true
+    header:
+      X-Midt-Server:
+        - themis
+      X-Midt-Version:
+        - unknown
+  claims:
+    address: :6502
+    disableHTTPKeepAlives: true
+    header:
+      X-Midt-Server:
+        - themis
+      X-Midt-Version:
+        - unknown
+  metrics:
+    address: :6503
+    disableHTTPKeepAlives: true
+
+  health:
+    address: :6504
+    disableHTTPKeepAlives: true
+    header:
+      X-Midt-Server:
+        - themis
+      X-Midt-Version:
+        - unknown
+health:
+  disableLogging: false
+  custom:
+    server: themis
+
+prometheus:
+  defaultNamespace: xmidt
+  defaultSubsystem: themis
+
+token:
+  alg: RS256
+  nonce: true
+  notBeforeDelta: -15s
+  duration: 24h
+  claims:
+    - key: mac
+      header: X-Midt-Mac-Address
+      parameter: mac
+    - key: serial
+      header: X-Midt-Serial-Number
+      parameter: serial
+    - key: uuid
+      header: X-Midt-Uuid
+      parameter: uuid
+    - key: iss
+      value: "themis"
+    - key: trust
+      value: 1000
+    - key: sub
+      value: "client-supplied"
+    - key: aud
+      value: "XMiDT"
+    - key: capabilities
+      value:
+        - x1:issuer:test:.*:all
+  metadata:
+    - key: mac
+      header: X-Midt-Mac-Address
+      parameter: mac
+    - key: serial
+      header: X-Midt-Serial-Number
+      parameter: serial
+    - key: uuid
+      header: X-Midt-Uuid
+      parameter: uuid
+  partnerID:
+    claim: partner-id
+    header: X-Midt-Partner-ID
+    parameter: pid
+    default: comcast
+
+  key:
+    kid: docker
+    type: rsa
+    bits: 2048
+
+log:
+  outputPaths:
+    - "stdout"
+  errorOutputPaths:
+    - "stdout"
+  level: debug
