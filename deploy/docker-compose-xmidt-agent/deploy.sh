@@ -20,7 +20,7 @@ PETASOS_VERSION=${PETASOS_VERSION:-latest} \
 TALARIA_VERSION=${TALARIA_VERSION:-latest} \
 THEMIS_VERSION=${THEMIS_VERSION:-latest} \
 SIMULATOR_VERSION=${SIMULATOR_VERSION:-latest-amd64} \
-docker compose -f $ROOT_DIR/deploy/docker-compose-new/docker-compose.yml up -d $@
+docker compose -f $ROOT_DIR/deploy/docker-compose-xmidt-agent/docker-compose.yml up -d $@
 if [[ $? -ne 0 ]]; then
   exit 1
 fi
