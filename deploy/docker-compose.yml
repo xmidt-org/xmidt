@@ -7,6 +7,10 @@ services:
     depends_on: 
       - dynamodb
     environment: 
+      - "AWS_ACCESS_KEY_ID=accessKey"
+      - "AWS_SECRET_ACCESS_KEY=secretKey"
+      - "AWS_ENDPOINT=http://dynamodb:4566"
+      - "AWS_REGION=local" 
       - "AWS_ENDPOINT=http://dynamodb:4566"
       - "TRACING_PROVIDER_NAME=zipkin"
       - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
@@ -16,6 +20,8 @@ services:
       - xmidt
     ports: 
       - "6600-6603:6600-6603"
+    volumes:
+      - "./docFiles/argus.yaml:/etc/argus/argus.yaml"
   caduceus: 
     container_name: caduceus
     depends_on: 
@@ -118,16 +124,19 @@ services:
     ports: 
       - "6300-6303:6300-6303"
   simulator: 
-    container_name: simulator
+    container_name: xmidt-agent
     depends_on: 
       - talaria-0
-      - talaria-1
-      - talaria-2
+      # - talaria-1
+      # - talaria-2
       - petasos
       - themis
-    image: "xmidt/simulator:${SIMULATOR_VERSION}"
+    image: "ghcr.io/xmidt-org/xmidt-agent:${SIMULATOR_VERSION}"
     networks: 
       - xmidt
+    volumes: 
+      - "./docFiles/mock_tr181.json:/mock_tr181.json"
+      - "./docFiles/xmidt-agent.yaml:/etc/xmidt-agent/xmidt-agent.yaml"
   talaria-0: 
     container_name: talaria
     depends_on: 
@@ -172,17 +181,18 @@ services:
       - "6220-6224:6200-6204"
   themis: 
     container_name: themis
+    hostname: themis
     environment: 
       - "CONSUL_HOST=consul0:8500"
       - TRACING_PROVIDER_NAME=zipkin
       - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
-    image: "ghcr.io/xmidt-org/themis:${THEMIS_VERSION}"
+    image: themis
     networks: 
       - xmidt
     ports: 
       - "6500-6504:6500-6504"
     volumes: 
-      - "./docFiles/themis.yaml:/etc/themis/themis.yaml"
+      - "./docFiles/themis/themis.yaml:/etc/themis/themis.yaml"
   tr1d1um: 
     container_name: tr1d1um
     depends_on: 
@@ -198,6 +208,12 @@ services:
       - xmidt
     ports: 
       - "6100-6103:6100-6103"
+  zipkin: 
+    image: openzipkin/zipkin
+    networks: 
+      - xmidt
+    ports: 
+      - "9411:9411"
   awscli-dynamo:
     image: amazon/aws-cli
     networks:
@@ -206,7 +222,7 @@ services:
       dynamodb:
         condition: service_healthy
     ports: 
-      - "4577:4577"
+      - "9000:9000"
     environment:
       AWS_ACCESS_KEY_ID: accessKey
       AWS_SECRET_ACCESS_KEY: secretKey
@@ -220,9 +236,4 @@ services:
        --key-schema \
           AttributeName=bucket,KeyType=HASH \
           AttributeName=id,KeyType=RANGE"   
-  zipkin: 
-    image: openzipkin/zipkin
-    networks: 
-      - xmidt
-    ports: 
-      - "9411:9411"
+version: "3.8"

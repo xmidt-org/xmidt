@@ -6,7 +6,7 @@ brought up for current ease of use. Future releases will deprecate Tr1d1um.
 
 1. Clone this repository
 
-2. Run `deploy/docker-compose-new/deploy.sh`  
+2. Run `deploy/docker-compose-xmidt-agent/deploy.sh`  
 
     It will then run `docker-compose up` which uses images of `talaria`, `scytale`, `petasos`, `caduceus`, `xmidt-agent` (device simulator) and `tr1d1um` from dockerhub. 
 
@@ -105,7 +105,7 @@ Content-Type: text/plain; charset=utf-8
 {"code": 404, "message": "Could not process device request: The device does not exist"}
 ```
 
-Check out that your simulator is connected:
+Check out that your simulator is connected (you may need to wait 30 to 60 seconds):
 
 ```
 curl -i -H "Authorization: Basic dXNlcjpwYXNz" "http://localhost:6100/api/v2/device/mac:112233445566/stat"
