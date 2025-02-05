@@ -20,7 +20,7 @@ PETASOS_VERSION=${PETASOS_VERSION:-latest} \
 TALARIA_VERSION=${TALARIA_VERSION:-latest} \
 THEMIS_VERSION=${THEMIS_VERSION:-latest} \
 SIMULATOR_VERSION=${SIMULATOR_VERSION:-latest} \
-docker compose -f $ROOT_DIR/deploy/docker-compose-c/docker-compose.yml up -d $@
+docker compose -f $ROOT_DIR/deploy/docker-compose/docker-compose.yml up -d $@
 if [[ $? -ne 0 ]]; then
   exit 1
 fi
