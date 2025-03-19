@@ -17,8 +17,8 @@ ARGUS_VERSION=${ARGUS_VERSION:-latest-amd64} \
 TR1D1UM_VERSION=${TR1D1UM_VERSION:-latest-amd64} \
 SCYTALE_VERSION=${SCYTALE_VERSION:-latest-amd64} \
 PETASOS_VERSION=${PETASOS_VERSION:-latest} \
-TALARIA_VERSION=${TALARIA_VERSION:-latest} \
-THEMIS_VERSION=${THEMIS_VERSION:-latest} \
+TALARIA_VERSION=${TALARIA_VERSION:-latest-amd64} \
+THEMIS_VERSION=${THEMIS_VERSION:-latest-amd64} \
 SIMULATOR_VERSION=${SIMULATOR_VERSION:-latest-amd64} \
 docker compose -f $ROOT_DIR/deploy/docker-compose-xmidt-agent/docker-compose.yml up -d $@
 if [[ $? -ne 0 ]]; then
