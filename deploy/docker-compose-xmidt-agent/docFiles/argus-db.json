@@ -1,0 +1,51 @@
+{
+    "AttributeDefinitions": [
+      {
+        "AttributeName": "bucket",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "id",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "expires",
+        "AttributeType": "N"
+      }
+    ],
+    "TableName": "gifnoc",
+    "KeySchema": [
+      {
+        "AttributeName": "bucket",
+        "KeyType": "HASH"
+      },
+      {
+        "AttributeName": "id",
+        "KeyType": "RANGE"
+      }
+    ],
+    "GlobalSecondaryIndexes": [
+      {
+        "IndexName": "Expires-index",
+        "KeySchema": [
+          {
+            "AttributeName": "bucket",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "expires",
+            "KeyType": "RANGE"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 5,
+          "WriteCapacityUnits": 5
+        }
+      }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "TableClass": "STANDARD"
+  }

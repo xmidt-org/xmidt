@@ -7,6 +7,9 @@ services:
     depends_on: 
       - dynamodb
     environment: 
+      - "AWS_ACCESS_KEY_ID=accessKey"
+      - "AWS_SECRET_ACCESS_KEY=secretKey"
+      - "AWS_REGION=local"
       - "AWS_ENDPOINT=http://dynamodb:4566"
       - "TRACING_PROVIDER_NAME=zipkin"
       - "TRACING_PROVIDER_ENDPOINT=http://zipkin:9411/api/v2/spans"
@@ -214,15 +217,9 @@ services:
       AWS_ACCESS_KEY_ID: accessKey
       AWS_SECRET_ACCESS_KEY: secretKey
       AWS_REGION: local
-    command: "dynamodb  --endpoint-url http://dynamodb:4566 create-table \
-       --table-name gifnoc \
-       --attribute-definitions \
-          AttributeName=bucket,AttributeType=S \
-          AttributeName=expires,AttributeType=N \
-          AttributeName=id,AttributeType=S \
-       --key-schema \
-          AttributeName=bucket,KeyType=HASH \
-          AttributeName=id,KeyType=RANGE"   
+    command: "dynamodb  --endpoint-url http://dynamodb:4566 create-table --cli-input-json file:///etc/argus-db.json"
+    volumes: 
+      - "./docFiles/argus-db.json:/etc/argus-db.json"
   zipkin: 
     image: openzipkin/zipkin
     networks: 
